@@ -21,10 +21,13 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.16.0"
+    "ember-cli-babel": "^6.16.0",
+    "ember-cli-release": "^1.0.0-beta.2",
+    "ember-cli-update": "^0.27.3"
   },
   "devDependencies": {
     "@ember/optional-features": "^0.6.3",
+    "@lblod/ember-rdfa-editor-generic-model-plugin": "^0.1.6",
     "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.1.0",
     "ember-cli": "~3.4.1",
@@ -41,10 +44,12 @@
     "ember-export-application-global": "^2.0.0",
     "ember-load-initializers": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",
+    "ember-power-select": "^2.0.9",
     "ember-resolver": "^5.0.1",
     "ember-source": "~3.4.0",
     "ember-source-channel-url": "^1.1.0",
     "ember-try": "^1.0.0",
+    "ember-vo-webuniversum": "^0.7.0",
     "eslint-plugin-ember": "^5.2.0",
     "eslint-plugin-node": "^7.0.1",
     "loader.js": "^4.7.0",
