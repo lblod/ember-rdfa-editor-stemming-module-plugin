@@ -1,6 +1,8 @@
-//TODO: weird mix vanilla objects and ember model...
+import { A } from '@ember/array';
+import EmberObject from '@ember/object';
+
 const constructResource = async function constructResource(metaModelService, subjectUri, triples, type = null){
-  let resource = {};
+  let resource = EmberObject.create({data: EmberObject.create(), meta: EmberObject.create() });
   if(!type)
     type = (triples.find(t => t.predicate == 'a' && t.subject == subjectUri) || {}).object;
 
@@ -9,15 +11,15 @@ const constructResource = async function constructResource(metaModelService, sub
     return null;
   }
 
-  //TODO: fix ember model mix
+  //TODO: what if nothing found
   let metaDataType = await metaModelService.getMetamodelForType(type);
-  resource['data'] = { uri: subjectUri };
-  resource['meta'] = { class : metaDataType };
+  resource.data.set('uri', subjectUri);
+  resource.meta.set('class', metaDataType);
   let metaProps = await metaModelService.getPropertiesFromType(type);
-  resource['meta']['properties'] = metaProps.toArray();
+  resource.meta.set('properties',  metaProps);
 
   await Promise.all(metaProps.map(async p => {
-    resource.data[p.label] = await constructDataFromProperty(metaModelService, p, subjectUri, triples);
+    resource.data.set(p.label, await constructDataFromProperty(metaModelService, p, subjectUri, triples));
   }));
 
   return resource;
@@ -36,7 +38,7 @@ const constructDataFromProperty = async function constructDataFromProperty(metaM
                            .map( t => t.object) ; //we assume these are URI's!!!
 
   //TODO: some weird stuff where context scanner generates double subject uri's
-  relationUris = [...(new Set(relationUris))];
+  relationUris  = A(Array.from(new Set(relationUris)));
 
   let resources = await Promise.all(relationUris.map(async uri => await constructResource(metaModelService,
                                                                                           uri,
