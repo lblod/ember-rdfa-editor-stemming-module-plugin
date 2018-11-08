@@ -2,7 +2,7 @@ import { A } from '@ember/array';
 import EmberObject from '@ember/object';
 
 const constructResource = async function constructResource(metaModelService, subjectUri, triples, type = null){
-  let resource = EmberObject.create({data: EmberObject.create(), meta: EmberObject.create() });
+  let resource = EmberObject.create({ _meta: EmberObject.create() });
   if(!type)
     type = (triples.find(t => t.predicate == 'a' && t.subject == subjectUri) || {}).object;
 
@@ -13,13 +13,12 @@ const constructResource = async function constructResource(metaModelService, sub
 
   //TODO: what if nothing found
   let metaDataType = await metaModelService.getMetamodelForType(type);
-  resource.data.set('uri', subjectUri);
-  resource.meta.set('class', metaDataType);
+  resource.set('uri', subjectUri);
+  resource._meta.set('class', metaDataType);
   let metaProps = await metaModelService.getPropertiesFromType(type);
-  resource.meta.set('properties',  metaProps);
-
   await Promise.all(metaProps.map(async p => {
-    resource.data.set(p.label, await constructDataFromProperty(metaModelService, p, subjectUri, triples));
+    resource._meta.set(p.label, p);
+    resource.set(p.label, await constructDataFromProperty(metaModelService, p, subjectUri, triples));
   }));
 
   return resource;
@@ -44,7 +43,7 @@ const constructDataFromProperty = async function constructDataFromProperty(metaM
                                                                                           uri,
                                                                                           triples,
                                                                                           await metaProperty.get('range.rdfaType'))));
-  return resources;
+  return A(resources);
 };
 
 export {
