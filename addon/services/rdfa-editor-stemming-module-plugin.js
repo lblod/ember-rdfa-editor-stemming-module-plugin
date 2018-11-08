@@ -4,6 +4,7 @@ import EmberObject, { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isArray } from '@ember/array';
 import { warn } from '@ember/debug';
+import ascendDomUntil from '../utils/ascend-dom-until';
 
 /**
  * Service responsible for correct annotation of dates
@@ -47,6 +48,7 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
         hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
       }
       let domNodeRegion = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
+      //make sure no double hinting
       if(triple.predicate == this.stemmingTable && !hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
         hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
         hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
@@ -102,8 +104,9 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
         location: hint.location,
         domNodeToUpdate: hint.domNode,
         instructiveUri: hint.instructiveUri,
-        editMode: hint.options.editMode,
-        hrId, hintsRegistry, editor
+        hrId, hintsRegistry, editor,
+        instructiveUri: hint.instructiveUri,
+        behandelingVanAgendapuntUri: hint.behandelingVanAgendapuntUri
       },
       location: hint.location,
       options: hint.options,
@@ -129,17 +132,13 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
     if(instructiveTriple.predicate == this.stemmingTable){
       location = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
       options.noHighlight = true;
-      options.editMode = true;
     }
-    hints.push({text, location, domNode, instructiveUri: instructiveTriple.predicate, options});
+    let behandelingVanAgendapuntUri = instructiveTriple.subject;
+    hints.push({text, location, domNode,
+                instructiveUri: instructiveTriple.predicate,
+                behandelingVanAgendapuntUri: instructiveTriple.subject,
+                options});
     return hints;
-  },
-
-  ascendDomNodesUntil(rootNode, domNode, condition){
-    if(!domNode || rootNode.isEqualNode(domNode)) return null;
-    if(!condition(domNode))
-      return this.ascendDomNodesUntil(rootNode, domNode.parentElement, condition);
-    return domNode;
   },
 
   domNodeMatchesRdfaInstructive(instructiveRdfa){
@@ -157,7 +156,7 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
   findDomNodeForContext(editor, context, condition){
     let richNodes = isArray(context.richNode) ? context.richNode : [ context.richNode ];
     let domNode = richNodes
-          .map(r => this.ascendDomNodesUntil(editor.rootNode, r.domNode, condition))
+          .map(r => ascendDomUntil(editor.rootNode, r.domNode, condition))
           .find(d => d);
     if(!domNode){
       warn(`Trying to work on unattached domNode. Sorry can't handle these...`, {id: 'stemming.domNode'});
