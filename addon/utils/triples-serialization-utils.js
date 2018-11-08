@@ -8,7 +8,7 @@ const constructResource = async function constructResource(metaModelService, sub
 
   if(!type){
     console.log(`No type found for ${subjectUri}`);
-    return null;
+    return resource;
   }
 
   //TODO: what if nothing found
