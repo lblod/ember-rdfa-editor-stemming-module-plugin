@@ -1,7 +1,8 @@
 //TODO: weird mix vanilla objects and ember model...
-const constructResource = async function constructResource(metaModelService, subjectUri, triples){
+const constructResource = async function constructResource(metaModelService, subjectUri, triples, type = null){
   let resource = {};
-  let type = (triples.find(t => t.predicate == 'a' && t.subject == subjectUri) || {}).object;
+  if(!type)
+    type = (triples.find(t => t.predicate == 'a' && t.subject == subjectUri) || {}).object;
 
   if(!type){
     console.log(`No type found for ${subjectUri}`);
@@ -34,10 +35,13 @@ const constructDataFromProperty = async function constructDataFromProperty(metaM
                            .filter(t => t.predicate == metaProperty.rdfaType && t.subject == subjectUri) || [])
                            .map( t => t.object) ; //we assume these are URI's!!!
 
-  //TODO: some weird stuff where context scanner generates doubles
+  //TODO: some weird stuff where context scanner generates double subject uri's
   relationUris = [...(new Set(relationUris))];
-  
-  let resources = await Promise.all(relationUris.map(async uri => await constructResource(metaModelService, uri, triples)));
+
+  let resources = await Promise.all(relationUris.map(async uri => await constructResource(metaModelService,
+                                                                                          uri,
+                                                                                          triples,
+                                                                                          await metaProperty.get('range.rdfaType'))));
   return resources;
 };
 
