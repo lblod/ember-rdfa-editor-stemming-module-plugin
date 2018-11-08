@@ -1,6 +1,10 @@
+import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-module-card';
+import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
 
 /**
 * Card displaying a hint of the Date plugin
@@ -11,7 +15,12 @@ import layout from '../../templates/components/editor-plugins/stemming-module-ca
 */
 export default Component.extend({
   layout,
-
+  expandedExt: 'http://mu.semte.ch/vocabularies/ext/',
+  outputId: computed('id', function() {
+    return `output-stemming-table-${this.elementId}`;
+  }),
+  store: service(),
+  rdfaEditorAanwezigenPlugin: service(),
   /**
    * Region on which the card applies
    * @property location
@@ -44,11 +53,42 @@ export default Component.extend({
   */
   hintsRegistry: reads('info.hintsRegistry'),
 
+  bestuursorgaanUri: reads('rdfaEditorAanwezigenPlugin.bestuursorgaanUri'),
+
+  async setProperties() {
+    let bestuurseenheid = ( await this.store.query('bestuurseenheid',
+                                           { 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri }
+                                                 )).firstObject;
+    this.set('bestuurseenheid', bestuurseenheid);
+
+    let bestuursorgaan = (await this.store.query('bestuursorgaan',
+                                                  { 'filter[:uri:]': this.bestuursorgaanUri }
+                                                )).firstObject;
+    this.set('bestuursorgaan', bestuursorgaan);
+  },
+
+  createWrappingHTML(innerHTML){
+    return `<div property="ext:stemmingTable">${innerHTML}</div>`;
+  },
+
+  loadData: task(function *(){
+    yield this.setProperties();
+  }),
+
+  didReceiveAttrs() {
+    this._super(...arguments);
+    if(this.bestuursorgaanUri)
+      this.loadData.perform();
+  },
+
   actions: {
     insert(){
-      let mappedLocation = this.get('hintsRegistry').updateLocationToCurrentIndex(this.get('hrId'), this.get('location'));
-      this.get('hintsRegistry').removeHintsAtLocation(this.get('location'), this.get('hrId'), 'editor-plugins/stemming-module-card');
-      this.get('editor').replaceTextWithHTML(...mappedLocation, this.get('info').htmlString);
+      const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
+      this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
+      this.get('editor').replaceNodeWithHTML(this.info.domNodeToUpdate, html);
+    },
+    togglePopup(){
+       this.toggleProperty('popup');
     }
   }
 });
