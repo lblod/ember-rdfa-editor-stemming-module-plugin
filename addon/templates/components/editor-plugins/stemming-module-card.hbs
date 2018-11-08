@@ -1,10 +1,58 @@
-<p class="u-spacer--tiny">{{info.label}} <br>
-  <strong>{{info.plainValue}}</strong>
-</p>
+<div class="modal-dialog__header">
+  <div class="grid">
+    <div class="col--10-12">
+      {{#if bestuursorgaanUri}}
+        {{#if loadData.isRunning}}
+          <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+        {{else}}
+          <p class="u-spacer--tiny">
+            Wil u graag de <strong>stemmingen</strong> beheren?
+          </p>
+        {{/if}}
+      {{else}}
+        <p class="u-spacer--tiny">
+          Gelieve eerst het <strong>bestuursorgaan</strong> te selecteren bovenaan het document, voor u de stemmingen invoert.
+        </p>
+      {{/if}}
+    </div>
+  </div>
+</div>
 
-{{#wu-button-group}}
-  {{wu-button label="Juist" size="small" isNarrow=true command="ctrl + j" commandLocation="below" onClick=(action "insert")}}
-  {{wu-button label="Negeer" size="tiny" isLink=true isDark=true isNarrow=true command="esc" commandLocation="below" onClick=null}}
-{{/wu-button-group}}
+<div class="modal-dialog__footer">
+  {{#wu-button-group}}
+    {{#if bestuursorgaanUri}}
+      {{wu-button
+        label="Beheer stemmingen"
+        isNarrow=true
+        onClick=(action "togglePopup")
+      }}
+    {{/if}}
+  {{/wu-button-group}}
+</div>
 
+{{# if popup}}
+  {{#wu-modal
+     title="Beheer stemmingen"
+     dialog-class="modal-dialog--wide modal-dialog--sectioned"
+     onClose=(action 'togglePopup')
+     as |m|}}
+    {{#m.content isSectioned=false}}
+      {{editor-plugins/stemming-container
+        editorRootNode=editor.rootNode
+        bestuurseenheid=bestuurseenheid
+        bestuursorgaan=bestuursorgaan
+        instructiveUri=info.instructiveUri
+        behandelingVanAgendapuntUri=info.behandelingVanAgendapuntUri
+        outputId=outputId
+        domTable=info.domNodeToUpdate
+      }}
+    {{/m.content}}
+    <div class="modal-dialog__footer">
+      {{#wu-button-group}}
+        {{wu-button label="Voeg stemmingen in" class="button button--narrow" onClick=(action 'insert')}}
+        {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
+      {{/wu-button-group}}
+    </div>
+  {{/wu-modal}}
+{{/if}}
 {{yield}}
