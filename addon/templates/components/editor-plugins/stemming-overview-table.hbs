@@ -1,0 +1,31 @@
+{{#unless addMode}}
+  <table class="data-table data-table--lined data-table--zebra">
+    <thead>
+      <tr>
+        <th>Onderwerp</th>
+        <th>Gevolg</th>
+        <th>Geheim</th>
+        <th>Aantal Voorstanders</th>
+        <th>Aantal Tegenstanders</th>
+        <th>Aantal Onthouders</th>
+        <th>
+          <div class="grid">
+            <div class="col--6-12">
+              Actie
+            </div>
+            <div class="col--6-12 u-align--right">
+              {{#wu-link-button class="button--small" isNarrow=true onClick=(action "add")}}
+                <i class="vi vi-plus vi-u-s"></i>Voeg stemming toe
+              {{/wu-link-button}}
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{{else}}
+
+{{/unless}}
+{{yield}}
