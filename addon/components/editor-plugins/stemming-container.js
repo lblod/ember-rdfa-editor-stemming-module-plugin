@@ -40,7 +40,7 @@ export default Component.extend({
       let subjectUri =bvap.get('onderwerp.0.uri');
       let apDomNode = this.findDomNodeAgendaPunt(subjectUri);
       let triples = this.serializeTableToTriples(apDomNode);
-      let ap = await constructResource(this.metaModelQuery, subjectUri, triples, 'http://data.vlaanderen.be/ns/besluit#Agendapunt');
+      let ap = await constructResource(this.metaModelQuery, subjectUri, triples, 'http://data.vlaanderen.be/ns/besluit#Agendapunt', true);
       bvap.set('onderwerp', A([ap]));
     }
   },
@@ -48,7 +48,7 @@ export default Component.extend({
   async constructBehandelingVanAp(){
     let domNodeBehandeling = ascendDomUntil(this.editorRootNode, this.domTable, this.isDomNodeBehandelingVanAgendapunt.bind(this));
     let agendapuntTriples = this.serializeTableToTriples(domNodeBehandeling);
-    let bvap = await constructResource(this.metaModelQuery, this.behandelingVanAgendapuntUri, agendapuntTriples);
+    let bvap = await constructResource(this.metaModelQuery, this.behandelingVanAgendapuntUri, agendapuntTriples, null, true);
     await this.addAgendaFromBehandelingVanAP(bvap);
     this.set('bvap', bvap);
   },

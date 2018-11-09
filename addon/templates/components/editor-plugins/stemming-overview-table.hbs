@@ -1,4 +1,4 @@
-{{#unless addMode}}
+{{#unless editMode}}
   <table class="data-table data-table--lined data-table--zebra">
     <thead>
       <tr>
@@ -23,9 +23,34 @@
       </tr>
     </thead>
     <tbody>
+      {{#each stemmingen as |stemming| }}
+        <tr>
+          <td>{{stemming.onderwerp}}</td>
+          <td>{{stemming.gevolg}}</td>
+          <td>{{stemming.geheim}}</td>
+          <td>{{stemming.aantalVoorstanders}}</td>
+          <td>{{stemming.aantalTegenstanders}}</td>
+          <td>{{stemming.aantalOnthouders}}</td>
+          <td>
+            {{#wu-button-group}}
+              {{#wu-link-button class="button--small" isNarrow=true onClick=(action "edit" stemming)}}
+                <i class="vi vi-edit vi-u-s"></i>Bewerk
+              {{/wu-link-button}}
+              {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "remove" stemming)}}
+                <i class="vi vi-cross vi-u-s"></i>Verwijder
+              {{/wu-link-button}}
+            {{/wu-button-group}}
+          </td>
+        </tr>
+      {{/each}}
     </tbody>
   </table>
 {{else}}
-
+  {{#if create}}
+    {{editor-plugins/edit-stemming stemming=editStemming onCancel=(action "cancel") onSave=(action "create")}}
+  {{/if}}
+  {{#if edit}}
+    {{editor-plugins/edit-stemming stemming=editStemming onCancel=(action "cancel") onSave=(action "save")}}
+  {{/if}}
 {{/unless}}
 {{yield}}

@@ -1,0 +1,22 @@
+<h2>Beheer stemming</h2>
+<div class="grid grid-collapse">
+  <div class="col--7-12">
+    Aantal voorstanders
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0}}
+  </div>
+  <div class="col--7-12">
+    Aantal tegenstanders
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0}}
+  </div>
+  <div class="col--7-12">
+    Aantal onthouders
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0}}
+  </div>
+</div>
+<div class="col--7-12 u-align--left">
+  {{#wu-button-group}}
+    {{#wu-button class="button--narrow button--small" onClick=(action 'save')}}<i class="vi vi-plus"></i>Bewaar{{/wu-button}}
+    {{#wu-button class="button--alt button--small button--narrow" onClick=(action 'cancel')}}Annuleer{{/wu-button}}
+  {{/wu-button-group}}
+</div>
+{{yield}}
