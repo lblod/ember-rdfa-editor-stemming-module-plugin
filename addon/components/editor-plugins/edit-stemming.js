@@ -12,7 +12,8 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['geheim' ] = parseInt(v);
+      this.set('viewModeGeheim', v);
+      this.propsToSave['geheim' ] = v;
       return v;
     }
 

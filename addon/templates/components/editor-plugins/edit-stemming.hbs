@@ -1,16 +1,31 @@
 <h2>Beheer stemming</h2>
 <div class="grid grid-collapse">
   <div class="col--7-12">
-    Aantal voorstanders
+    <strong>Aantal voorstanders</strong>
     {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0}}
   </div>
   <div class="col--7-12">
-    Aantal tegenstanders
+    <strong>Aantal tegenstanders</strong>
     {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0}}
   </div>
   <div class="col--7-12">
-    Aantal onthouders
+    <strong>Aantal onthouders</strong>
     {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0}}
+  </div>
+  <div class="col--7-12">
+    <label class="checkbox checkbox--block">
+    {{input class="checkbox__toggle" type="checkbox" checked=geheim }}
+    <span></span>
+    <strong>Geheim</strong>
+    </label>
+  </div>
+  <div class="col--7-12">
+    <strong>Onderwerp</strong>
+    {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=onderwerp}}
+  </div>
+  <div class="col--7-12">
+    <strong>Gevolg</strong>
+    {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
   </div>
 </div>
 <div class="col--7-12 u-align--left">

@@ -27,7 +27,13 @@
         <tr>
           <td>{{stemming.onderwerp}}</td>
           <td>{{stemming.gevolg}}</td>
-          <td>{{stemming.geheim}}</td>
+          <td>
+            {{#if geheim}}
+              geheim
+            {{else}}
+              openbaar
+            {{/if}}
+          </td>
           <td>{{stemming.aantalVoorstanders}}</td>
           <td>{{stemming.aantalTegenstanders}}</td>
           <td>{{stemming.aantalOnthouders}}</td>
