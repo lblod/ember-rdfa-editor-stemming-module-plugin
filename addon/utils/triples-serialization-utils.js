@@ -3,6 +3,12 @@ import EmberObject from '@ember/object';
 import { warn } from '@ember/debug';
 import uuid from 'uuid/v4';
 
+const getAllResourcesForType = async function getAllResourcesForType(metaModelService, type, triples, camelCaseProperties = false){
+  let subjectUris = triples.filter(t => t.predicate == 'a' && t.object == type).map(t => t.subject);
+  subjectUris = A(Array.from(new Set(subjectUris)));
+  return await Promise.all(subjectUris.map(async uri => await constructResource(metaModelService, uri, triples, type, camelCaseProperties)));
+};
+
 const constructResource = async function constructResource(metaModelService, subjectUri, triples, type = null, camelCaseProperties = false){
   let resource = EmberObject.create({ _meta: EmberObject.create() });
   if(!type)
@@ -80,5 +86,6 @@ const constructDataFromProperty = async function constructDataFromProperty(metaM
 
 export {
   constructResource,
-  createEmptyResource
+  createEmptyResource,
+  getAllResourcesForType
 }
