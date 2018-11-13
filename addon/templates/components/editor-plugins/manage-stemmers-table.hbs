@@ -1,0 +1,43 @@
+<table class="data-table data-table--lined data-table--zebra">
+  <thead>
+    <tr>
+      <th>Naam</th>
+      <th>Hoedanigheid</th>
+      <th>Stemgedrag</th>
+      <th>
+        <div class="grid">
+          <div class="col--6-12">
+            Actie
+          </div>
+          <div class="col--6-12 u-align--right">
+            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "addStemmer")}}
+              <i class="vi vi-plus vi-u-s"></i>Voeg stemmer toe
+            {{/wu-link-button}}
+          </div>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows as |row|}}
+      <tr>
+        <td>{{row.persoon.gebruikteVoornaam}} {{row.persoon.achternaam}}</td>
+        <td>{{editor-plugins/mandataris-selector
+              mandatarissen=row.mandatarissen
+              mandataris=row.selectedMandataris
+              onChange=(action "updateMandataris" row)}}
+        </td>
+        <td>
+          {{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour" row)}}
+        </td>
+        <td>
+          {{#wu-button-group}}
+            {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "deleteRow" row)}}
+              <i class="vi vi-cross vi-u-s"></i>Verwijder stemmer
+            {{/wu-link-button}}
+          {{/wu-button-group}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

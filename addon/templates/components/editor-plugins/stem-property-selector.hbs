@@ -1,0 +1,13 @@
+{{#if loadData.isRunning}}
+  <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+{{else}}
+  {{#power-select
+     options=stemProperties
+     allowClear=true
+     renderInPlace=true
+     selected=_stemProperty
+     onchange=(action "select")
+     as |stemProperty|}}
+    {{stemProperty.label}}
+  {{/power-select}}
+{{/if}}

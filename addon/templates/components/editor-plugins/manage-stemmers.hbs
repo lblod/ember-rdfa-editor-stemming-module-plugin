@@ -1,0 +1,6 @@
+{{#if loadData.isRunning}}
+  <p class="loader"><span class="u-visually-hidden">Bezig met laden van stemmers</span></p>
+{{else}}
+  {{editor-plugins/manage-stemmers-table stemming=stemming mandatarissen=mandatarissen editMode=editMode}}
+{{/if}}
+{{yield}}

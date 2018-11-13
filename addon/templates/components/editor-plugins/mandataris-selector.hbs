@@ -1,0 +1,13 @@
+{{#if needsSelectbox}}
+  {{#power-select
+     options=mandatarissen
+     allowClear=true
+     renderInPlace=true
+     selected=mandataris
+     onchange=(action "select")
+     as |mandataris|}}
+    {{mandataris.bekleedt.0.bestuursfunctie.0.label}}
+  {{/power-select}}
+{{else}}
+  {{mandataris.bekleedt.0.bestuursfunctie.0.label}}
+{{/if}}
