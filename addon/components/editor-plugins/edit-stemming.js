@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/edit-stemming';
 import { computed } from '@ember/object';
-import { oneWay } from '@ember/object/computed';
+import { A } from '@ember/array';
 
 export default Component.extend({
   layout,
@@ -11,12 +11,11 @@ export default Component.extend({
       return this.stemming.get('geheim') || false;
     },
 
-    set(k, v){
-      this.set('viewModeGeheim', v);
-      this.propsToSave['geheim' ] = v;
-      return v;
+    set(k, isGeheim){
+      this.set('viewModeOpenbaar', !isGeheim);
+      this.stemming.set('geheim', isGeheim);
+      return isGeheim;
     }
-
   }),
 
   aantalOnthouders: computed('stemming.aantalOnthouders', {
@@ -25,7 +24,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['aantalOnthouders'] = parseInt(v);
+      this.stemming.set('aantalOnthouders', parseInt(v));
       return v;
     }
 
@@ -37,7 +36,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['aantalVoorstanders'] = parseInt(v);
+      this.stemming('aantalVoorstanders', parseInt(v));
       return v;
     }
   }),
@@ -48,7 +47,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['aantalTegenstanders'] = parseInt(v);
+      this.stemming('aantalTegenstanders', parseInt(v));
       return v;
     }
   }),
@@ -59,7 +58,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['gevolg'] = v;
+      this.stemming.set('gevolg', v);
       return v;
     }
   }),
@@ -70,7 +69,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.propsToSave['onderwerp'] = v;
+      this.stemming.set('onderwerp', v);
       return v;
     }
   }),
@@ -82,16 +81,15 @@ export default Component.extend({
 
   actions: {
     save(){
-      Object.keys(this.propsToSave).forEach(p => {
-        this.stemming.set(p, this.propsToSave[p]);
-      });
+      if(this.stemming.geheim){
+        this.stemming.set('voorstanders', A());
+        this.stemming.set('tegenstanders', A());
+        this.stemming.set('onthouders', A());
+      }
       this.onSave(this.stemming);
     },
     cancel(){
       this.onCancel();
     }
   }
-
-
-
 });

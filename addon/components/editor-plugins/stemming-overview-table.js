@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-overview-table';
-import { createEmptyResource } from '../../utils/triples-serialization-utils';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { computed } from '@ember/object';
@@ -8,6 +7,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
   layout,
   metaModelQuery: service(),
+  tripleSerialization: service('triplesSerializationUtils'),
 
   editMode: computed('edit', 'create', {
     get(){
@@ -24,10 +24,14 @@ export default Component.extend({
 
   createNewStemming: task(function*(){
     let typeUri = (yield this.metaModelQuery.getMetaModelForLabel('stemming')).get('rdfaType');
-    let emptyStemming = yield createEmptyResource(this.metaModelQuery, typeUri, true);
+    let emptyStemming = yield this.tripleSerialization.createEmptyResource(typeUri, true);
     this.set('editStemming', emptyStemming);
     this.set('create', true);
   }),
+
+  didReceiveAttrs() {
+    this._super(...arguments);
+  },
 
   actions: {
 

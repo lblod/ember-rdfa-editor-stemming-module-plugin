@@ -1,3 +1,13 @@
 <h1> Stemmingen bij agendapunt "{{bvap.onderwerp.0.titel}}"</h1>
-{{editor-plugins/stemming-overview-table stemmingen=bvap.stemmingen}}
+{{#if loadData.isRunning}}
+  <p class="loader"><span class="u-visually-hidden">Aan het laden</span></p>
+{{else}}
+  {{editor-plugins/stemming-overview-table
+    stemmingen=bvap.stemmingen
+    domNodeBehandelingAP=domNodeBehandelingAP
+    editorRootNode=editorRootNode
+    bestuurseenheid=bestuurseenheid
+    bestuursorgaan=bestuursorgaan
+  }}
+{{/if}}
 {{yield}}

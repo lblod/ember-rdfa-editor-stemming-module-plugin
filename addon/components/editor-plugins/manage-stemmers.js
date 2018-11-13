@@ -64,8 +64,6 @@ export default Component.extend({
   }),
 
   async loadDataCreateMode(){
-    let typeStemming = await this.metaModelQuery.getMetaModelForLabel("Stemming");
-    this.set('stemming', await this.tripleSerialization.createEmptyResource(typeStemming.rdfaType, true));
     let personen = await this.personenInAgendapunt();
     let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapuntUntilCurrent();
     let mandatarissen = await this.findMandatarissenInDocument(allTriplesSoFar);
@@ -94,17 +92,25 @@ export default Component.extend({
     this.loadData.perform();
   },
 
-  actions: {
-    updateStem(stemming){
+  updateCountStemBehaviour(){
+    this.stemming.set('aantalVoorstanders', this.stemming.voorstanders.length);
+    this.stemming.set('aantalTegenstanders', this.stemming.tegenstanders.length);
+    this.stemming.set('aantalOnthouders', this.stemming.onthouders.length);
+  },
 
+
+  actions: {
+    updateStemmer(){
+      if(!this.stemming.geheim){
+        this.updateCountStemBehaviour();
+      }
     },
 
-    removeStemmer(stemming){
-
+    removeStemmer(){
+      if(!this.stemming.geheim){
+        this.updateCountStemBehaviour();
+      }
     }
   }
-
-
-
 
 });

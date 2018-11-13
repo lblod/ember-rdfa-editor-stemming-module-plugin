@@ -4,10 +4,13 @@ import { A } from '@ember/array';
 import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { reads } from '@ember/object/computed';
 
 export default Component.extend({
   layout,
   metaModelQuery: service(),
+
+  isSecret: reads('stemming.geheim'),
 
   async setVoteBehaviourTypes(){
     this.set('voorstanderProp', await this.metaModelQuery.getPropertiesForLabel('voorstanders').firstObject);
@@ -75,6 +78,7 @@ export default Component.extend({
         if(row.selectedStemBehaviour)
           this.stemming.get(row.selectedStemBehaviour.label).pushObject(mandataris);
       }
+      this.onUpdate();
     },
 
     updateStembehaviour(row, stemBehaviour){
@@ -83,11 +87,13 @@ export default Component.extend({
         row.set('selectedStemBehaviour', stemBehaviour);
         this.stemming.get(stemBehaviour.label).pushObject(row.selectedMandataris);
       }
+      this.onUpdate();
     },
 
     deleteRow(row){
       this.flushMandatarisFromStemming(row.selectedMandataris);
-      row.removeObject(row);
+      this.rows.removeObject(row);
+      this.onRemove();
     },
 
     addStemmer(){

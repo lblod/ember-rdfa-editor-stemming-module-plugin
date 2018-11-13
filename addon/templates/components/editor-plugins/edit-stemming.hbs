@@ -2,15 +2,15 @@
 <div class="grid grid-collapse">
   <div class="col--7-12">
     <strong>Aantal voorstanders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0}}
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0 disabled=viewModeOpenbaar}}
   </div>
   <div class="col--7-12">
     <strong>Aantal tegenstanders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0}}
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0 disabled=viewModeOpenbaar}}
   </div>
   <div class="col--7-12">
     <strong>Aantal onthouders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0}}
+    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0 disabled=viewModeOpenbaar}}
   </div>
   <div class="col--7-12">
     <label class="checkbox checkbox--block">
@@ -26,6 +26,18 @@
   <div class="col--7-12">
     <strong>Gevolg</strong>
     {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
+  </div>
+  <div class="col--7-12">
+    <strong>Stemmers</strong>
+    {{editor-plugins/manage-stemmers
+      stemming=stemming
+      domAgendapunt=domAgendapunt
+      vieModeOpenbaar=viewModeOpenbaar
+      editorRootNode=editorRootNode
+      domNodeBehandelingAP=domNodeBehandelingAP
+      bestuurseenheid=bestuurseenheid
+      bestuursorgaan=bestuursorgaan
+    }}
   </div>
 </div>
 <div class="col--7-12 u-align--left">

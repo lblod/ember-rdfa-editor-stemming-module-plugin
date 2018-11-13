@@ -53,10 +53,26 @@
   </table>
 {{else}}
   {{#if create}}
-    {{editor-plugins/edit-stemming stemming=editStemming onCancel=(action "cancel") onSave=(action "create")}}
+    {{editor-plugins/edit-stemming
+      stemming=editStemming
+      onCancel=(action "cancel")
+      onSave=(action "create")
+      domNodeBehandelingAP=domNodeBehandelingAP
+      editorRootNode=editorRootNode
+      bestuurseenheid=bestuurseenheid
+      bestuursorgaan=bestuursorgaan
+    }}
   {{/if}}
   {{#if edit}}
-    {{editor-plugins/edit-stemming stemming=editStemming onCancel=(action "cancel") onSave=(action "save")}}
+    {{editor-plugins/edit-stemming
+      stemming=editStemming
+      onCancel=(action "cancel")
+      onSave=(action "save")
+      domNodeBehandelingAP=domNodeBehandelingAP
+      editorRootNode=editorRootNode
+      bestuurseenheid=bestuurseenheid
+      bestuursorgaan=bestuursorgaan
+    }}
   {{/if}}
 {{/unless}}
 {{yield}}

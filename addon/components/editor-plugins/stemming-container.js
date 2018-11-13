@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-container';
 import ascendDomUntil from '../../utils/ascend-dom-until';
 import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
-import { constructResource } from '../../utils/triples-serialization-utils';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
@@ -10,6 +9,7 @@ import { A } from '@ember/array';
 export default Component.extend({
   layout,
   metaModelQuery: service(),
+  tripleSerialization: service('triplesSerializationUtils'),
 
   isDomNodeBehandelingVanAgendapunt(domNode){
     let besluit = 'http://data.vlaanderen.be/ns/besluit#';
@@ -40,15 +40,14 @@ export default Component.extend({
       let subjectUri =bvap.get('onderwerp.0.uri');
       let apDomNode = this.findDomNodeAgendaPunt(subjectUri);
       let triples = this.serializeTableToTriples(apDomNode);
-      let ap = await constructResource(this.metaModelQuery, subjectUri, triples, 'http://data.vlaanderen.be/ns/besluit#Agendapunt', true);
+      let ap = await this.tripleSerialization.constructResource(subjectUri, triples, 'http://data.vlaanderen.be/ns/besluit#Agendapunt', true);
       bvap.set('onderwerp', A([ap]));
     }
   },
 
   async constructBehandelingVanAp(){
-    let domNodeBehandeling = ascendDomUntil(this.editorRootNode, this.domTable, this.isDomNodeBehandelingVanAgendapunt.bind(this));
-    let agendapuntTriples = this.serializeTableToTriples(domNodeBehandeling);
-    let bvap = await constructResource(this.metaModelQuery, this.behandelingVanAgendapuntUri, agendapuntTriples, null, true);
+    let agendapuntTriples = this.serializeTableToTriples(this.domNodeBehandelingAP);
+    let bvap = await this.tripleSerialization.constructResource(this.behandelingVanAgendapuntUri, agendapuntTriples, null, true);
     await this.addAgendaFromBehandelingVanAP(bvap);
     this.set('bvap', bvap);
   },
@@ -61,7 +60,14 @@ export default Component.extend({
     return Array.concat(...contexts);
   },
 
+  setBehandelingVanAP(){
+    let domNodeBehandeling = ascendDomUntil(this.editorRootNode, this.domTable, this.isDomNodeBehandelingVanAgendapunt.bind(this));
+    this.set('domNodeBehandelingAP', domNodeBehandeling);
+  },
+
+
   loadData: task(function *(){
+    this.setBehandelingVanAP();
     yield this.constructBehandelingVanAp();
   }),
 
@@ -69,6 +75,5 @@ export default Component.extend({
     this._super(...arguments);
     if(this.behandelingVanAgendapuntUri)
       this.loadData.perform();
-  },
-
+  }
 });

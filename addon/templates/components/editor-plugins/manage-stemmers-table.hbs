@@ -3,7 +3,9 @@
     <tr>
       <th>Naam</th>
       <th>Hoedanigheid</th>
-      <th>Stemgedrag</th>
+      {{#unless isSecret}}
+        <th>Stemgedrag</th>
+      {{/unless}}
       <th>
         <div class="grid">
           <div class="col--6-12">
@@ -27,9 +29,11 @@
               mandataris=row.selectedMandataris
               onChange=(action "updateMandataris" row)}}
         </td>
-        <td>
+        {{#unless isSecret}}
+          <td>
           {{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour" row)}}
-        </td>
+          </td>
+        {{/unless}}
         <td>
           {{#wu-button-group}}
             {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "deleteRow" row)}}
