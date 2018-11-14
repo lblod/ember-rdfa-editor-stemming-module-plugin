@@ -29,23 +29,25 @@ export default Component.extend({
     let rows = [];
 
     //for ease of code: flush the stemmers and reconstruct them
-    this.stemming.set('stemmers', A());
+    let updatedStemmers = A();
 
     for(let persoonUri of persoonUris){
       let mandatarissen = this.mandatarissen.filter( m => m.isBestuurlijkeAliasVan[0].uri == persoonUri );
       let selectedMandataris = mandatarissen.find(this.findStemBehaviour.bind(this));
 
       //set a default one
-      if(!selectedMandataris)
-        selectedMandataris = mandatarissen[0];
+      if(!selectedMandataris){
+        let mandatarisAlsStemmer = this.stemming.stemmers.find(m => m.isBestuurlijkeAliasVan[0].uri == persoonUri);
+        selectedMandataris =mandatarisAlsStemmer ||  mandatarissen[0];
+      }
 
-      this.stemming.stemmers.pushObject(selectedMandataris);
+      updatedStemmers.pushObject(selectedMandataris);
 
       let selectedStemBehaviour = this.findStemBehaviour(selectedMandataris);
 
       rows.push(EmberObject.create({persoon: mandatarissen[0].isBestuurlijkeAliasVan[0], mandatarissen, selectedMandataris, selectedStemBehaviour}));
     }
-
+    this.stemming.set('stemmers', updatedStemmers);
     this.set('rows', A(rows));
   },
 
