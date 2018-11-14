@@ -20,19 +20,28 @@ export default Component.extend({
 
   constructRows(){
     //TODO: cleanup to generic groupBy
-    let persoonUris = this.mandatarissen.map(m => m.isBestuurlijkeAliasVan[0].uri);
+    let persoonUris = this.stemming.stemmers.map(m => m.isBestuurlijkeAliasVan[0].uri);
+    if(persoonUris.length == 0)
+      persoonUris = this.mandatarissen.map(m => m.isBestuurlijkeAliasVan[0].uri);
+
     persoonUris = Array.from(new Set(persoonUris));
 
     let rows = [];
 
+    //for ease of code: flush the stemmers and reconstruct them
+    this.stemming.set('stemmers', A());
+
     for(let persoonUri of persoonUris){
       let mandatarissen = this.mandatarissen.filter( m => m.isBestuurlijkeAliasVan[0].uri == persoonUri );
       let selectedMandataris = this.mandatarissen.find(this.findStemBehaviour.bind(this));
-      let selectedStemBehaviour = this.findStemBehaviour(selectedMandataris);
 
       //set a default one
       if(!selectedMandataris)
         selectedMandataris = mandatarissen[0];
+
+      this.stemming.stemmers.pushObject(selectedMandataris);
+
+      let selectedStemBehaviour = this.findStemBehaviour(selectedMandataris);
 
       rows.push(EmberObject.create({persoon: mandatarissen[0].isBestuurlijkeAliasVan[0], mandatarissen, selectedMandataris, selectedStemBehaviour}));
     }
