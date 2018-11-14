@@ -71,6 +71,13 @@ export default Component.extend({
     }
   },
 
+  updateStemmer(stemBehaviour, mandataris){
+    if(mandataris)
+      this.stemming.stemmers.pushObject(mandataris);
+    if(stemBehaviour)
+      this.stemming.get(stemBehaviour.label).pushObject(mandataris);
+  },
+
   loadData: task(function*(){
     yield this.setVoteBehaviourTypes();
     this.constructRows();
@@ -85,20 +92,17 @@ export default Component.extend({
 
     updateMandataris(row, mandataris){
       this.flushMandatarisFromStemming(row.selectedMandataris);
-      if(mandataris){
+      this.updateStemmer(row.selectedStemBehaviour, mandataris);
+      if(mandataris)
         row.set('selectedMandataris', mandataris);
-        if(row.selectedStemBehaviour)
-          this.stemming.get(row.selectedStemBehaviour.label).pushObject(mandataris);
-      }
       this.onUpdate();
     },
 
     updateStembehaviour(row, stemBehaviour){
       this.flushMandatarisFromStemming(row.selectedMandataris);
-      if(stemBehaviour){
+      this.updateStemmer(stemBehaviour, row.selectedMandataris);
+      if(stemBehaviour)
         row.set('selectedStemBehaviour', stemBehaviour);
-        this.stemming.get(stemBehaviour.label).pushObject(row.selectedMandataris);
-      }
       this.onUpdate();
     },
 
