@@ -13,6 +13,7 @@ export default Component.extend({
 
   //TODO: apply business rules which orgaan which mandataris is allowed
   //TODO: performance -> make sure context scanner runs only once
+  //TODO: get mandatarissen from backend too
 
   getAllTriplesBehandelingenVanAgendapuntUntilCurrent(){
     let propertyToQuery = 'besluit:BehandelingVanAgendapunt'; //TODO: this is naive take also uri's into account
@@ -57,10 +58,7 @@ export default Component.extend({
   },
 
   loadData: task(function*(){
-    if(this.editMode)
-      yield this.loadDataEditMode();
-    else
-      yield this.loadDataCreateMode();
+    yield this.loadDataCreateMode();
   }),
 
   async loadDataCreateMode(){
@@ -72,17 +70,6 @@ export default Component.extend({
       mandatarissenAP = [...mandatarissenAP, ...this.findMandatarissen(p, mandatarissen)];
     }
     this.set('mandatarissen', A(mandatarissenAP));
-  },
-
-  async loadDataEditmode(){
-    let mandatarissenAndStem = A();
-    let voorstanderProp = await this.metaModelQuery.getPropertiesForLabel('voorstanders').firstObject;
-    let tegenstanderProp = await this.metaModelQuery.getPropertiesForLabel('tegenstanders').firstObject;
-    let onthouderProp = await this.metaModelQuery.getPropertiesForLabel('onthouders').firstObject;
-    this.stemming.voorstanders.forEach(m => mandatarissenAndStem.pushObject({ mandataris: m, stem: voorstanderProp }));
-    this.stemming.tegenstanders.forEach(m => mandatarissenAndStem.pushObject({ mandataris: m, stem: tegenstanderProp }));
-    this.stemming.onthouders.forEach(m => mandatarissenAndStem.pushObject({ mandataris: m, stem: onthouderProp }));
-    this.set('mandatarissenAndStem', mandatarissenAndStem);
   },
 
   didReceiveAttrs() {
@@ -97,7 +84,6 @@ export default Component.extend({
     this.stemming.set('aantalTegenstanders', this.stemming.tegenstanders.length);
     this.stemming.set('aantalOnthouders', this.stemming.onthouders.length);
   },
-
 
   actions: {
     updateStemmer(){
