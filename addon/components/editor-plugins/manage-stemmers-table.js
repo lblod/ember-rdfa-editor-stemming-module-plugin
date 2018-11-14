@@ -13,9 +13,9 @@ export default Component.extend({
   isSecret: reads('stemming.geheim'),
 
   async setVoteBehaviourTypes(){
-    this.set('voorstanderProp', await this.metaModelQuery.getPropertiesForLabel('voorstanders').firstObject);
-    this.set('tegenstanderProp', await this.metaModelQuery.getPropertiesForLabel('tegenstanders').firstObject);
-    this.set('onthouderProp', await this.metaModelQuery.getPropertiesForLabel('onthouders').firstObject);
+    this.set('voorstanderProp', (await this.metaModelQuery.getPropertiesForLabel('voorstanders')).firstObject);
+    this.set('tegenstanderProp', (await this.metaModelQuery.getPropertiesForLabel('tegenstanders')).firstObject);
+    this.set('onthouderProp', (await this.metaModelQuery.getPropertiesForLabel('onthouders')).firstObject);
   },
 
   constructRows(){
