@@ -63,9 +63,12 @@ export default Component.extend({
   },
 
   flushMandatarisFromStemming(mandataris){
-    this.stemming.voorstanders.removeObject(mandataris);
-    this.stemming.tegenstanders.removeObject(mandataris);
-    this.stemming.onthouders.removeObject(mandataris);
+    //Objects might change reference, so we need to remove on uri
+    let props = ['voorstanders', 'tegenstanders', 'onthouders', 'stemmers'];
+    for(let prop of props){
+      let mandatarisToDelete = this.stemming.get(prop).find(m => m.uri == mandataris.uri);
+      this.stemming.get(prop).removeObject(mandatarisToDelete);
+    }
   },
 
   loadData: task(function*(){
