@@ -12,10 +12,13 @@ export default Component.extend({
     },
 
     set(k, isGeheim){
-      this.set('viewModeOpenbaar', !isGeheim);
       this.stemming.set('geheim', isGeheim);
       return isGeheim;
     }
+  }),
+
+  viewModeOpenbaar: computed('stemming.geheim', function(){
+    return !(this.stemming.get('geheim') || false);
   }),
 
   aantalOnthouders: computed('stemming.aantalOnthouders', {
@@ -36,7 +39,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.stemming('aantalVoorstanders', parseInt(v));
+      this.stemming.set('aantalVoorstanders', parseInt(v));
       return v;
     }
   }),
@@ -47,7 +50,7 @@ export default Component.extend({
     },
 
     set(k, v){
-      this.stemming('aantalTegenstanders', parseInt(v));
+      this.stemming.set('aantalTegenstanders', parseInt(v));
       return v;
     }
   }),
