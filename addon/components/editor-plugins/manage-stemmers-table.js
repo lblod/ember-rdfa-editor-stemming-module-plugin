@@ -33,7 +33,7 @@ export default Component.extend({
 
     for(let persoonUri of persoonUris){
       let mandatarissen = this.mandatarissen.filter( m => m.isBestuurlijkeAliasVan[0].uri == persoonUri );
-      let selectedMandataris = this.mandatarissen.find(this.findStemBehaviour.bind(this));
+      let selectedMandataris = mandatarissen.find(this.findStemBehaviour.bind(this));
 
       //set a default one
       if(!selectedMandataris)
