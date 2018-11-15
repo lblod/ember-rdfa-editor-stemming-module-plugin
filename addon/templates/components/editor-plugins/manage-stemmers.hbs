@@ -3,7 +3,9 @@
 {{else}}
   {{editor-plugins/manage-stemmers-table
     stemming=stemming
-    mandatarissen=mandatarissen
+    mandatarissenInDocument=mandatarissenInDocument
+    personenInDocument=personenInDocument
+    bestuursorgaan=bestuursorgaan
     onUpdate=(action "updateStemmer")
     onRemove=(action "removeStemmer")
   }}

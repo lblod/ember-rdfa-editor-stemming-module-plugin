@@ -12,7 +12,7 @@
             Actie
           </div>
           <div class="col--6-12 u-align--right">
-            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "addStemmer")}}
+            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "initAddStemmer")}}
               <i class="vi vi-plus vi-u-s"></i>Voeg stemmer toe
             {{/wu-link-button}}
           </div>
@@ -21,27 +21,26 @@
     </tr>
   </thead>
   <tbody>
-    {{#each rows as |row|}}
-      <tr>
-        <td>{{row.persoon.gebruikteVoornaam}} {{row.persoon.achternaam}}</td>
-        <td>{{editor-plugins/mandataris-selector
-              mandatarissen=row.mandatarissen
-              mandataris=row.selectedMandataris
-              onChange=(action "updateMandataris" row)}}
-        </td>
-        {{#unless isSecret}}
-          <td>
-          {{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour" row)}}
-          </td>
-        {{/unless}}
-        <td>
-          {{#wu-button-group}}
-            {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "deleteRow" row)}}
-              <i class="vi vi-cross vi-u-s"></i>Verwijder stemmer
-            {{/wu-link-button}}
-          {{/wu-button-group}}
-        </td>
-      </tr>
-    {{/each}}
+    {{#if isBusy}}
+      <p class="loader"><span class="u-visually-hidden">Bezig met laden...</span></p>
+    {{else}}
+      {{#if addStemmerMode}}
+        {{editor-plugins/manage-stemmers-table-row
+          isSecret=isSecret
+          addStemmerMode=addStemmerMode
+          onSaveNewPersoon=(action "saveNewPersoon")
+          onCancelAddStemmer=(action "cancelAddStemmer")
+        }}
+      {{/if}}
+      {{#each rows as |row|}}
+        {{editor-plugins/manage-stemmers-table-row
+          row=row
+          onUpdateMandataris=(action "updateMandataris" row)
+          onUpdateStembehaviour=(action "updateStembehaviour" row)
+          onDeleteRow=(action "deleteRow" row)
+          isSecret=isSecret
+        }}
+      {{/each}}
+    {{/if}}
   </tbody>
 </table>

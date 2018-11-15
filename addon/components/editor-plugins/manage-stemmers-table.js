@@ -4,13 +4,19 @@ import { A } from '@ember/array';
 import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
+import emberModelToGenericModel from '../../utils/ember-model-to-generic-model';
 
 export default Component.extend({
   layout,
   metaModelQuery: service(),
-
+  store: service(),
   isSecret: reads('stemming.geheim'),
+
+  isBusy: computed('loadData.isRunning', 'updateRowForNewPerson.isRunning', function(){
+    return this.loadData.isRunning || this.updateRowForNewPerson.isRunning;
+  }),
 
   async setVoteBehaviourTypes(){
     this.set('voorstanderProp', (await this.metaModelQuery.getPropertiesForLabel('voorstanders')).firstObject);
@@ -18,11 +24,27 @@ export default Component.extend({
     this.set('onthouderProp', (await this.metaModelQuery.getPropertiesForLabel('onthouders')).firstObject);
   },
 
-  constructRows(){
+  async findMandatarissen(persoonUri){
+    let mandatarissen = this.mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoonUri);
+    let mandatarissenBackend = await this.store.query('mandataris', {
+      'filter[is-bestuurlijke-alias-van][:uri:]': persoonUri,
+      'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri
+    });
+    for(let mandataris of mandatarissenBackend.toArray()){
+      let m = await emberModelToGenericModel(this.tripleSerialization,
+                                             this.metaModelQuery,
+                                             mandataris,
+                                             ['bekleedt.bestuursfunctie', 'isBestuurlijkeAliasVan']);
+      mandatarissen.push(m);
+    }
+    return mandatarissen;
+  },
+
+  async constructRows(){
     //TODO: cleanup to generic groupBy
     let persoonUris = this.stemming.stemmers.map(m => m.isBestuurlijkeAliasVan[0].uri);
     if(persoonUris.length == 0)
-      persoonUris = this.mandatarissen.map(m => m.isBestuurlijkeAliasVan[0].uri);
+      persoonUris = this.personenInDocument.map(p => p.uri);
 
     persoonUris = Array.from(new Set(persoonUris));
 
@@ -32,23 +54,33 @@ export default Component.extend({
     let updatedStemmers = A();
 
     for(let persoonUri of persoonUris){
-      let mandatarissen = this.mandatarissen.filter( m => m.isBestuurlijkeAliasVan[0].uri == persoonUri );
-      let selectedMandataris = mandatarissen.find(this.findStemBehaviour.bind(this));
-
-      //set a default one
-      if(!selectedMandataris){
-        let mandatarisAlsStemmer = this.stemming.stemmers.find(m => m.isBestuurlijkeAliasVan[0].uri == persoonUri);
-        selectedMandataris =mandatarisAlsStemmer ||  mandatarissen[0];
-      }
-
-      updatedStemmers.pushObject(selectedMandataris);
-
-      let selectedStemBehaviour = this.findStemBehaviour(selectedMandataris);
-
-      rows.push(EmberObject.create({persoon: mandatarissen[0].isBestuurlijkeAliasVan[0], mandatarissen, selectedMandataris, selectedStemBehaviour}));
+      let row = await this.createRow(persoonUri);
+      updatedStemmers.pushObject(row.selectedMandataris);
+      rows.push(row);
     }
     this.stemming.set('stemmers', updatedStemmers);
     this.set('rows', A(rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim()))));
+  },
+
+  updateRowForNewPerson: task(function* (persoon){
+    let row = yield this.createRow(persoon.uri);
+    this.stemming.stemmers.pushObject(row.selectedMandataris);
+    this.rows.pushObject(row);
+    this.set('addStemmerMode', false);
+    this.set('rows', this.rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim())));
+  }),
+
+  async createRow(persoonUri){
+    let mandatarissen = await this.findMandatarissen(persoonUri);
+    let selectedMandataris = mandatarissen.find(this.findStemBehaviour.bind(this));
+
+    //set a default one
+    if(!selectedMandataris){
+      let mandatarisAlsStemmer = this.stemming.stemmers.find(m => m.isBestuurlijkeAliasVan[0].uri == persoonUri);
+      selectedMandataris =mandatarisAlsStemmer ||  mandatarissen[0];
+    }
+    let selectedStemBehaviour = this.findStemBehaviour(selectedMandataris);
+    return EmberObject.create({persoon: mandatarissen[0].isBestuurlijkeAliasVan[0], mandatarissen, selectedMandataris, selectedStemBehaviour});
   },
 
   findStemBehaviour(mandataris){
@@ -82,7 +114,7 @@ export default Component.extend({
 
   loadData: task(function*(){
     yield this.setVoteBehaviourTypes();
-    this.constructRows();
+    yield this.constructRows();
   }),
 
   didReceiveAttrs() {
@@ -114,8 +146,16 @@ export default Component.extend({
       this.onRemove();
     },
 
-    addStemmer(){
+    initAddStemmer(){
+      this.set('addStemmerMode', true);
+    },
 
+    cancelAddStemmer(){
+      this.set('addStemmerMode', false);
+    },
+
+    saveNewPersoon(persoon){
+      this.updateRowForNewPerson.perform(persoon);
     }
   }
 });

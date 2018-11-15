@@ -5,7 +5,6 @@ import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
-import emberModelToGenericModel from '../../utils/ember-model-to-generic-model';
 
 export default Component.extend({
   layout,
@@ -15,7 +14,6 @@ export default Component.extend({
 
   //TODO: apply business rules which orgaan which mandataris is allowed
   //TODO: performance -> make sure context scanner runs only once
-  //TODO: get mandatarissen from backend too
 
   getAllTriplesBehandelingenVanAgendapuntUntilCurrent(){
     let propertyToQuery = 'besluit:BehandelingVanAgendapunt'; //TODO: this is naive take also uri's into account
@@ -55,22 +53,6 @@ export default Component.extend({
     return this.tripleSerialization.getAllResourcesForType(metaModelM.rdfaType, triples, true);
   },
 
-  async findMandatarissen(persoon, mandatarissenInDocument){
-    let mandatarissen = mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoon.uri);
-    let mandatarissenBackend = await this.store.query('mandataris', {
-      'filter[is-bestuurlijke-alias-van][:uri:]': persoon.uri,
-      'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri
-    });
-    for(let mandataris of mandatarissenBackend.toArray()){
-      let m = await emberModelToGenericModel(this.tripleSerialization,
-                                             this.metaModelQuery,
-                                             mandataris,
-                                             ['bekleedt.bestuursfunctie', 'isBestuurlijkeAliasVan']);
-      mandatarissen.push(m);
-    }
-    return mandatarissen;
-  },
-
   loadData: task(function*(){
     yield this.loadDataCreateMode();
   }),
@@ -79,11 +61,8 @@ export default Component.extend({
     let personen = await this.personenInAgendapunt();
     let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapuntUntilCurrent();
     let mandatarissen = await this.findMandatarissenInDocument(allTriplesSoFar);
-    let mandatarissenAP = [];
-    for(let p of personen){
-      mandatarissenAP = [...mandatarissenAP, ...(await this.findMandatarissen(p, mandatarissen))];
-    }
-    this.set('mandatarissen', A(mandatarissenAP));
+    this.set('mandatarissenInDocument', mandatarissen);
+    this.set('personenInDocument', personen);
   },
 
   didReceiveAttrs() {
