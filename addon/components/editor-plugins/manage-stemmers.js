@@ -5,9 +5,11 @@ import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
+import emberModelToGenericModel from '../../utils/ember-model-to-generic-model';
 
 export default Component.extend({
   layout,
+  store: service(),
   metaModelQuery: service(),
   tripleSerialization: service('triplesSerializationUtils'),
 
@@ -53,8 +55,17 @@ export default Component.extend({
     return this.tripleSerialization.getAllResourcesForType(metaModelM.rdfaType, triples, true);
   },
 
-  findMandatarissen(persoon, mandatarissenInDocument){
-    return mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoon.uri);
+  async findMandatarissen(persoon, mandatarissenInDocument){
+    let mandatarissen = mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoon.uri);
+    let mandatarissenBackend = await this.store.query('mandataris', { 'filter[is-bestuurlijke-alias-van][:uri:]': persoon.uri });
+    for(let mandataris of mandatarissenBackend.toArray()){
+      let m = await emberModelToGenericModel(this.tripleSerialization,
+                                             this.metaModelQuery,
+                                             mandataris,
+                                             ['bekleedt.bestuursfunctie', 'isBestuurlijkeAliasVan']);
+      mandatarissen.push(m);
+    }
+    return mandatarissen;
   },
 
   loadData: task(function*(){
@@ -67,7 +78,7 @@ export default Component.extend({
     let mandatarissen = await this.findMandatarissenInDocument(allTriplesSoFar);
     let mandatarissenAP = [];
     for(let p of personen){
-      mandatarissenAP = [...mandatarissenAP, ...this.findMandatarissen(p, mandatarissen)];
+      mandatarissenAP = [...mandatarissenAP, ...(await this.findMandatarissen(p, mandatarissen))];
     }
     this.set('mandatarissen', A(mandatarissenAP));
   },

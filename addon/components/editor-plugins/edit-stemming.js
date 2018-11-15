@@ -3,6 +3,7 @@ import layout from '../../templates/components/editor-plugins/edit-stemming';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
 
+//TODO: simplify up properties
 export default Component.extend({
   layout,
 
