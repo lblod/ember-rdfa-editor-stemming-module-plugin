@@ -48,7 +48,7 @@ export default Component.extend({
       rows.push(EmberObject.create({persoon: mandatarissen[0].isBestuurlijkeAliasVan[0], mandatarissen, selectedMandataris, selectedStemBehaviour}));
     }
     this.stemming.set('stemmers', updatedStemmers);
-    this.set('rows', A(rows));
+    this.set('rows', A(rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim()))));
   },
 
   findStemBehaviour(mandataris){
