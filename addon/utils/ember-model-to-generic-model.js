@@ -11,7 +11,10 @@ const emberModelToGenericModel = async function emberModelToGenericModel(seriali
 
 const updateAttributes = function updateAttributes(genericModelInstance, emberModelInstance){
   let attributes = [];
-  emberModelInstance.get('constructor.fields').forEach((k, v) => { if(v == 'attribute') attributes.push(k); } );
+  emberModelInstance.get('constructor.fields').forEach((k, v) => {
+    if(k == 'attribute')
+      attributes.push(v);
+  } );
   attributes.forEach(a => { genericModelInstance.set(a, emberModelInstance.get(a)); });
 };
 
