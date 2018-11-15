@@ -57,7 +57,10 @@ export default Component.extend({
 
   async findMandatarissen(persoon, mandatarissenInDocument){
     let mandatarissen = mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoon.uri);
-    let mandatarissenBackend = await this.store.query('mandataris', { 'filter[is-bestuurlijke-alias-van][:uri:]': persoon.uri });
+    let mandatarissenBackend = await this.store.query('mandataris', {
+      'filter[is-bestuurlijke-alias-van][:uri:]': persoon.uri,
+      'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri
+    });
     for(let mandataris of mandatarissenBackend.toArray()){
       let m = await emberModelToGenericModel(this.tripleSerialization,
                                              this.metaModelQuery,
