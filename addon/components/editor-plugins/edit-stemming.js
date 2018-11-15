@@ -2,10 +2,18 @@ import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/edit-stemming';
 import { computed } from '@ember/object';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
 
-//TODO: simplify up properties
+//TODO: simplify properties
 export default Component.extend({
   layout,
+  store: service(),
+  metaModelQuery: service(),
+  tripleSerialization: service('triplesSerializationUtils'),
+  manageAanwezigen: true,
+  manageStemmers: false,
 
   geheim: computed('stemming.geheim', {
     get(){
@@ -78,12 +86,96 @@ export default Component.extend({
     }
   }),
 
+  //TODO: apply business rules which orgaan which mandataris is allowed
+  //TODO: performance -> make sure context scanner runs only once
+  //TODO: adding person should be scoped to the ones having a mandaat within context
+  getAllTriplesBehandelingenVanAgendapuntUntilCurrent(){
+    let propertyToQuery = 'besluit:BehandelingVanAgendapunt'; //TODO: this is naive take also uri's into account
+    //Assumes array is ordened see https://www.w3.org/TR/selectors-api/#queryselectorall
+    let nodes = this.editorRootNode.querySelectorAll(`[typeof="${propertyToQuery}"]`);
+    let behandelingenVanAgendapunt = [];
+
+    //get all behandelingenVanAgendapunt until the current one;
+    for(let node of nodes){
+      if(this.domNodeBehandelingAP.isSameNode(node)){
+        behandelingenVanAgendapunt.push(node);
+        break;
+      }
+      behandelingenVanAgendapunt.push(node);
+    }
+
+    let allTriplesSoFar = [];
+    behandelingenVanAgendapunt.forEach(n => allTriplesSoFar = [...allTriplesSoFar, ...this.serializeDomToTriples(n)] );
+    return allTriplesSoFar;
+  },
+
+  async personenInAgendapunt(){
+    let metaModelP = await this.metaModelQuery.getMetaModelForLabel("Persoon");
+    return this.tripleSerialization.getAllResourcesForType(metaModelP.rdfaType, this.serializeDomToTriples(this.domNodeBehandelingAP), true);
+  },
+
+  serializeDomToTriples(domNode){
+    const contextScanner = RdfaContextScanner.create({});
+    const contexts = contextScanner.analyse(domNode).map((c) => c.context);
+    if(contexts.length == 0)
+      return [];
+    return Array.concat(...contexts);
+  },
+
+  async findMandatarissenInDocument(triples){
+    let metaModelM = await this.metaModelQuery.getMetaModelForLabel("Mandataris");
+    return this.tripleSerialization.getAllResourcesForType(metaModelM.rdfaType, triples, true);
+  },
+
+  loadData: task(function*(){
+    let personen = yield this.personenInAgendapunt();
+    let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapuntUntilCurrent();
+    let mandatarissen = yield this.findMandatarissenInDocument(allTriplesSoFar);
+    this.set('mandatarissenInDocument', mandatarissen);
+    this.set('personenInDocument', personen);
+  }),
+
   didReceiveAttrs() {
     this._super(...arguments);
-    this.set('propsToSave', {});
+    if(!this.domNodeBehandelingAP)
+      return;
+    this.loadData.perform();
+  },
+
+  updateCountStemBehaviour(){
+    this.stemming.set('aantalVoorstanders', this.stemming.voorstanders.length);
+    this.stemming.set('aantalTegenstanders', this.stemming.tegenstanders.length);
+    this.stemming.set('aantalOnthouders', this.stemming.onthouders.length);
   },
 
   actions: {
+    manageAanwezigen(){
+      this.set('manageAanwezigen', true);
+      this.set('manageStemmers', false);
+    },
+
+    manageStemmers(){
+      this.set('manageAanwezigen', false);
+      this.set('manageStemmers', true);
+    },
+    removeAanwezige(){
+      if(!this.stemming.geheim){
+        this.updateCountStemBehaviour();
+      }
+    },
+
+    updateStemmer(){
+      if(!this.stemming.geheim){
+        this.updateCountStemBehaviour();
+      }
+    },
+
+    removeStemmer(){
+      if(!this.stemming.geheim){
+        this.updateCountStemBehaviour();
+      }
+    },
+
     save(){
       if(this.stemming.geheim){
         this.stemming.set('voorstanders', A());
@@ -92,6 +184,7 @@ export default Component.extend({
       }
       this.onSave(this.stemming);
     },
+
     cancel(){
       this.onCancel();
     }

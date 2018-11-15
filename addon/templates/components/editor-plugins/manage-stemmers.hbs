@@ -1,13 +1,12 @@
 {{#if loadData.isRunning}}
-  <p class="loader"><span class="u-visually-hidden">Bezig met laden van stemmers</span></p>
+  <p class="loader"><span class="u-visually-hidden">Bezig met laden</span></p>
 {{else}}
-  {{editor-plugins/manage-stemmers-table
+  {{editor-plugins/aanwezigen-stemming-table
     stemming=stemming
     mandatarissenInDocument=mandatarissenInDocument
     personenInDocument=personenInDocument
     bestuursorgaan=bestuursorgaan
-    onUpdate=(action "updateStemmer")
-    onRemove=(action "removeStemmer")
+    onRemove=(action "removeAanwezige")
   }}
 {{/if}}
 {{yield}}

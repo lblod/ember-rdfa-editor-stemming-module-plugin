@@ -6,38 +6,16 @@
       {{#unless isSecret}}
         <th>Stemgedrag</th>
       {{/unless}}
-      <th>
-        <div class="grid">
-          <div class="col--6-12">
-            Actie
-          </div>
-          <div class="col--6-12 u-align--right">
-            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "initAddStemmer")}}
-              <i class="vi vi-plus vi-u-s"></i>Voeg stemmer toe
-            {{/wu-link-button}}
-          </div>
-        </div>
-      </th>
     </tr>
   </thead>
   <tbody>
     {{#if isBusy}}
       <p class="loader"><span class="u-visually-hidden">Bezig met laden...</span></p>
     {{else}}
-      {{#if addStemmerMode}}
-        {{editor-plugins/manage-stemmers-table-row
-          isSecret=isSecret
-          addStemmerMode=addStemmerMode
-          onSaveNewPersoon=(action "saveNewPersoon")
-          onCancelAddStemmer=(action "cancelAddStemmer")
-        }}
-      {{/if}}
       {{#each rows as |row|}}
         {{editor-plugins/manage-stemmers-table-row
           row=row
-          onUpdateMandataris=(action "updateMandataris" row)
           onUpdateStembehaviour=(action "updateStembehaviour" row)
-          onDeleteRow=(action "deleteRow" row)
           isSecret=isSecret
         }}
       {{/each}}

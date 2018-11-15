@@ -27,17 +27,37 @@
     <strong>Gevolg</strong>
     {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
   </div>
-  <div class="col--7-12">
-    <strong>Stemmers</strong>
-    {{editor-plugins/manage-stemmers
+  <div class="col--12-12">
+  <div class="grid">
+    <nav class="col--1-1" role="navigation" data-tabs>
+      <ul class="tabs tabs--block u-spacer--none" data-tabs-list>
+        <li class={{if manageAanwezigen "tab tab--active" "tab"}}>
+          <a class="tab__link" href="#" onclick={{action 'manageAanwezigen'}}>
+            Beheer aanwezigen en stemmers</a>
+        </li>
+        <li class={{if manageStemmers "tab tab--active" "tab"}}>
+          <a class="tab__link" href="#" onclick={{action 'manageStemmers'}}>
+            Beheer stemming</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  {{#if manageAanwezigen}}
+    {{editor-plugins/aanwezigen-stemming-table
       stemming=stemming
-      domAgendapunt=domAgendapunt
-      vieModeOpenbaar=viewModeOpenbaar
-      editorRootNode=editorRootNode
-      domNodeBehandelingAP=domNodeBehandelingAP
-      bestuurseenheid=bestuurseenheid
+      mandatarissenInDocument=mandatarissenInDocument
+      personenInDocument=personenInDocument
       bestuursorgaan=bestuursorgaan
+      onRemoveAanwezige=(action "removeAanwezige")
+      onRemoveStemmer=(action "removeStemmer")
     }}
+  {{/if}}
+  {{#if manageStemmers}}
+    {{editor-plugins/manage-stemmers-table
+      stemming=stemming
+      onUpdate=(action "updateStemmer")
+    }}
+  {{/if}}
   </div>
 </div>
 <div class="col--7-12 u-align--left">

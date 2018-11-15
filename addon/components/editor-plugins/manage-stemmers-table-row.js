@@ -6,29 +6,8 @@ export default Component.extend({
   layout,
 
   actions: {
-    updateMandataris(mandataris){
-      this.onUpdateMandataris(mandataris);
-    },
-
     updateStembehaviour(stemBehaviour){
-      this.updateStembehaviour(stemBehaviour);
-    },
-
-    deleteRow(){
-      this.onDeleteRow();
-    },
-
-    selectNewPersoon(persoon){
-      this.set('newPersoon', persoon);
-    },
-
-    cancelAddStemmer(){
-      this.set('newPersoon', null);
-      this.onCancelAddStemmer();
-    },
-
-    saveNewPersoon(){
-      this.onSaveNewPersoon(this.newPersoon);
+      this.onUpdateStembehaviour(stemBehaviour);
     }
   }
 });

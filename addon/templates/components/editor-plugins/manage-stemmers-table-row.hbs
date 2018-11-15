@@ -1,42 +1,11 @@
 <td>
-  {{#unless addStemmerMode}}
-    {{row.persoon.gebruikteVoornaam}} {{row.persoon.achternaam}}
-  {{else}}
-    {{editor-plugins/select-new-persoon-stemmer onSelect=(action "selectNewPersoon")}}
-  {{/unless}}
+  {{row.persoon.gebruikteVoornaam}} {{row.persoon.achternaam}}
 </td>
 <td>
-  {{#unless addStemmerMode}}
-    {{editor-plugins/mandataris-selector
-      mandatarissen=row.mandatarissen
-      mandataris=row.selectedMandataris
-      onChange=(action "updateMandataris")}}
-  {{/unless}}
+  {{row.mandataris.bekleedt.0.bestuursfunctie.0.label}}
 </td>
 {{#unless isSecret}}
   <td>
-    {{#unless addStemmerMode}}
-      {{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour")}}
-    {{/unless}}
+    {{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour")}}
   </td>
 {{/unless}}
-<td>
-  {{#unless addStemmerMode}}
-    {{#wu-button-group}}
-      {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "deleteRow")}}
-        <i class="vi vi-cross vi-u-s"></i>Verwijder stemmer
-      {{/wu-link-button}}
-    {{/wu-button-group}}
-  {{else}}
-    {{#wu-button-group}}
-      {{#if newPersoon}}
-        {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "saveNewPersoon")}}
-          <i class="vi vi-plus vi-u-s"></i>Voeg persoon toe
-        {{/wu-link-button}}
-      {{/if}}
-      {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "cancelAddStemmer")}}
-        <i class="vi vi-cross vi-u-s"></i>Annuleer
-      {{/wu-link-button}}
-    {{/wu-button-group}}
-  {{/unless}}
-</td>

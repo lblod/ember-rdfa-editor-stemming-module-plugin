@@ -1,0 +1,42 @@
+<table class="data-table data-table--lined data-table--zebra">
+  <thead>
+    <tr>
+      <th>Naam</th>
+      <th>Hoedanigheid</th>
+      <th>
+        <div class="grid">
+          <div class="col--6-12">
+            Actie
+          </div>
+          <div class="col--6-12 u-align--right">
+            {{#wu-link-button class="button--small" isNarrow=true onClick=(action "initAddPersoon")}}
+              <i class="vi vi-plus vi-u-s"></i>Voeg aanwezige toe
+            {{/wu-link-button}}
+          </div>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if isBusy}}
+      <p class="loader"><span class="u-visually-hidden">Bezig met laden...</span></p>
+    {{else}}
+      {{#if initAddPersoon}}
+        {{editor-plugins/aanwezigen-stemming-table-row
+          initAddPersoon=initAddPersoon
+          onCancelAddPersoon=(action "cancelAddPersoon")
+          onSaveNewPersoon=(action "saveNewPersoon")
+        }}
+      {{/if}}
+      {{#each rows as |row|}}
+        {{editor-plugins/aanwezigen-stemming-table-row
+          row=row
+          onUpdateMandatarisAanwezige=(action "updateMandatarisAanwezige" row)
+          onAddStemmer=(action "addStemmer" row)
+          onRemoveStemmer=(action "removeStemmer" row)
+          onRemoveAanwezige=(action "removeAanwezige" row)
+        }}
+      {{/each}}
+    {{/if}}
+  </tbody>
+</table>
