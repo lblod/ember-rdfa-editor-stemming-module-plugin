@@ -1,1 +1,29 @@
-{{yield}}
+<h1>Stemming bij agendapunt</h1>
+{{#each stemmingen as |stemming|}}
+  <ul>
+    <li>
+      Onderwerp: {{stemming.onderwerp}}
+    </li>
+    <li>
+      Voorstanders: {{stemming.aantalVoorstanders}}, tegenstanders: {{stemming.aantalTegenstanders}}, onthouders: {{stemming.aantalOnthouders}}
+    </li>
+    <li>
+      Geheim:
+      {{#if stemming.geheim}} geheim {{else}} openbaar {{/if}}
+    </li>
+    <li>
+      Aanwezigen tijdens stemming:
+      {{#each stemming.aanwezigen as |mandataris|}}
+        {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+        {{mandataris.isBestuurlijkeAliasVan.0.achternaam}} ({{mandataris.bekleedt.0.bestuursfunctie.0.label}}),
+      {{/each}}
+    </li>
+    <li>
+      Effectieve stemmers:
+      {{#each stemming.stemmers as |mandataris|}}
+        {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+        {{mandataris.isBestuurlijkeAliasVan.0.achternaam}} ({{mandataris.bekleedt.0.bestuursfunctie.0.label}}),
+      {{/each}}
+    </li>
+  </ul>
+{{/each}}
