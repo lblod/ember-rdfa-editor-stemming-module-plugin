@@ -1,5 +1,6 @@
 <h2>Overzicht stemming</h2>
-{{#each stemmingen as |stemming|}}
+<div resource={{behandelingVanAgendapuntUri}} typeof="besluit:BehandelingVanAgendapunt">
+  {{#each stemmingen as |stemming|}}
   <div property="besluit:heeftStemming" resource={{stemming.uri}} typeof={{stemming._meta_generic_model.class}}>
     <ul>
       <li>
@@ -177,4 +178,5 @@
       </li>
     </ul>
   </div>
-{{/each}}
+  {{/each}}
+</div>
