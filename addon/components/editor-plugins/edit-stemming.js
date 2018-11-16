@@ -112,7 +112,9 @@ export default Component.extend({
 
   async personenInAgendapunt(){
     let metaModelP = await this.metaModelQuery.getMetaModelForLabel("Persoon");
-    return this.tripleSerialization.getAllResourcesForType(metaModelP.rdfaType, this.serializeDomToTriples(this.domNodeBehandelingAP), true);
+    let triples = this.serializeDomToTriples(this.domNodeBehandelingAP);
+    triples.forEach(t => t.object = t.object.trim());
+    return this.tripleSerialization.getAllResourcesForType(metaModelP.rdfaType, triples, true);
   },
 
   serializeDomToTriples(domNode){
@@ -131,6 +133,7 @@ export default Component.extend({
   loadData: task(function*(){
     let personen = yield this.personenInAgendapunt();
     let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapuntUntilCurrent();
+    allTriplesSoFar.forEach(t => t.object = t.object.trim());
     let mandatarissen = yield this.findMandatarissenInDocument(allTriplesSoFar);
     this.set('mandatarissenInDocument', mandatarissen);
     this.set('personenInDocument', personen);
