@@ -76,8 +76,8 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
     if(context.context.slice(-1)[0].predicate == this.insertStemmingText){
       return context.context.slice(-1)[0];
     }
-    if(context.context.slice(-1)[0].predicate == this.stemmingTable){
-      return context.context.slice(-1)[0];
+    if(context.context.find(t => t.predicate == this.stemmingTable)){
+      return context.context.find(t => t.predicate == this.stemmingTable);
     }
     return null;
   },
