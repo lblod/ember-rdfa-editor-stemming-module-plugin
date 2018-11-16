@@ -17,7 +17,7 @@ export default Component.extend({
 
   geheim: computed('stemming.geheim', {
     get(){
-      return this.stemming.get('geheim') || false;
+      return this.stemming.get('geheim') == "true" || false;
     },
 
     set(k, isGeheim){
@@ -89,6 +89,8 @@ export default Component.extend({
   //TODO: apply business rules which orgaan which mandataris is allowed
   //TODO: performance -> make sure context scanner runs only once
   //TODO: adding person should be scoped to the ones having a mandaat within context
+  //TODO: check if datatype is done by rdfaContext
+  //TODO: strip strings from triple
   getAllTriplesBehandelingenVanAgendapuntUntilCurrent(){
     let propertyToQuery = 'besluit:BehandelingVanAgendapunt'; //TODO: this is naive take also uri's into account
     //Assumes array is ordened see https://www.w3.org/TR/selectors-api/#queryselectorall

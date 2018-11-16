@@ -1,29 +1,180 @@
-<h1>Stemming bij agendapunt</h1>
+<h2>Stemming bij agendapunt</h2>
 {{#each stemmingen as |stemming|}}
-  <ul>
-    <li>
-      Onderwerp: {{stemming.onderwerp}}
-    </li>
-    <li>
-      Voorstanders: {{stemming.aantalVoorstanders}}, tegenstanders: {{stemming.aantalTegenstanders}}, onthouders: {{stemming.aantalOnthouders}}
-    </li>
-    <li>
-      Geheim:
-      {{#if stemming.geheim}} geheim {{else}} openbaar {{/if}}
-    </li>
-    <li>
-      Aanwezigen tijdens stemming:
-      {{#each stemming.aanwezigen as |mandataris|}}
-        {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
-        {{mandataris.isBestuurlijkeAliasVan.0.achternaam}} ({{mandataris.bekleedt.0.bestuursfunctie.0.label}}),
-      {{/each}}
-    </li>
-    <li>
-      Effectieve stemmers:
-      {{#each stemming.stemmers as |mandataris|}}
-        {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
-        {{mandataris.isBestuurlijkeAliasVan.0.achternaam}} ({{mandataris.bekleedt.0.bestuursfunctie.0.label}}),
-      {{/each}}
-    </li>
-  </ul>
+  <div property="besluit:heeftStemming" resource={{stemming.uri}} typeof={{stemming._meta_generic_model.class}}>
+    <ul>
+      <li>
+        Onderwerp: <span property="besluit:onderwerp"> {{stemming.onderwerp}} </span>
+      </li>
+      <li>
+        Voorstanders:
+        <span property="besluit:aantalVoorstanders" content={{stemming.aantalVoorstanders}}>
+          {{stemming.aantalVoorstanders}}
+        </span>,
+        Tegenstanders:
+        <span property="besluit:aantalTegenstanders" content={{stemming.aantalTegenstanders}}>
+          {{stemming.aantalTegenstanders}}
+        </span>,
+        onthouders:
+        <span property="besluit:aantalOnthouders" content={{stemming.aantalOnthouders}}>
+          {{stemming.aantalOnthouders}}
+        </span>
+      </li>
+      <li>
+        Geheim:
+        <span property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
+          {{#if stemming.geheim}} geheim {{else}} openbaar {{/if}}
+        </span>
+      </li>
+      <li>
+        Aanwezigen tijdens stemming:
+        {{#each stemming.aanwezigen as |mandataris|}}
+          <span property="besluit:heeftAanwezige" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class}}>
+
+            <span property="mandaat:isBestuurlijkeAliasVan"
+              resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
+              typeof=mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class>
+
+                <span property="persoon:gebruikteVoornaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+                </span>
+
+                <span property="persoon:achternaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+                </span>
+
+            </span>
+            <span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class}}>
+              <span property="org:role"
+                resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
+                typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class}}>
+                <span property="skos:prefLabel"> {{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
+              </span>
+            </span>
+          </span>
+        {{/each}}
+      </li>
+      <li>
+        Effectieve stemmers:
+        {{#each stemming.stemmers as |mandataris|}}
+          <span property="besluit:heeftStemmer" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class}}>
+
+            <span property="mandaat:isBestuurlijkeAliasVan"
+              resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
+              typeof=mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class>
+
+              <span property="persoon:gebruikteVoornaam">
+                {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+              </span>
+
+              <span property="persoon:achternaam">
+                {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+              </span>
+
+            </span>
+            <span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class}}>
+              <span property="org:role"
+                resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
+                typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class}}>
+                <span property="skos:prefLabel"> {{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
+              </span>
+            </span>
+          </span>
+
+        {{/each}}
+      </li>
+      {{#unless stemming.geheim}}
+        <li>
+          Voorstanders:
+          {{#each stemming.voorstanders as |mandataris|}}
+            <span property="besluit:heeftVoorstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class}}>
+
+              <span property="mandaat:isBestuurlijkeAliasVan"
+                resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
+                typeof=mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class>
+
+                <span property="persoon:gebruikteVoornaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+                </span>
+
+                <span property="persoon:achternaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+                </span>
+
+              </span>
+              <span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class}}>
+                <span property="org:role"
+                  resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
+                  typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class}}>
+                  <span property="skos:prefLabel"> {{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
+                </span>
+              </span>
+            </span>
+
+          {{/each}}
+        </li>
+        <li>
+          Tegenstanders:
+          {{#each stemming.tegenstanders as |mandataris|}}
+            <span property="besluit:heeftTegenstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class}}>
+
+              <span property="mandaat:isBestuurlijkeAliasVan"
+                resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
+                typeof=mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class>
+
+                <span property="persoon:gebruikteVoornaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+                </span>
+
+                <span property="persoon:achternaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+                </span>
+
+              </span>
+              <span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class}}>
+                <span property="org:role"
+                  resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
+                  typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class}}>
+                  <span property="skos:prefLabel"> {{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
+                </span>
+              </span>
+            </span>
+
+          {{/each}}
+        </li>
+        <li>
+          Onthouders:
+          {{#each stemming.onthouders as |mandataris|}}
+            <span property="besluit:heeftOnthouder" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class}}>
+
+              <span property="mandaat:isBestuurlijkeAliasVan"
+                resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
+                typeof=mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class>
+
+                <span property="persoon:gebruikteVoornaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+                </span>
+
+                <span property="persoon:achternaam">
+                  {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+                </span>
+
+              </span>
+              <span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class}}>
+                <span property="org:role"
+                  resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
+                  typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class}}>
+                  <span property="skos:prefLabel"> {{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
+                </span>
+              </span>
+            </span>
+          {{/each}}
+        </li>
+      {{/unless}}
+      <li>Gevolg:
+        <span property="besluit:gevolg">
+          {{stemming.gevolg}}
+        </span>
+      </li>
+    </ul>
+  </div>
 {{/each}}
