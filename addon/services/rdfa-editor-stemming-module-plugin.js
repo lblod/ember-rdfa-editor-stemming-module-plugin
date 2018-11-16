@@ -133,10 +133,10 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
       location = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
       options.noHighlight = true;
     }
-    let behandelingVanAgendapuntUri = instructiveTriple.subject;
+    let behandelingVanAgendapuntUri = context.context.slice(0).reverse().find(t => t.predicate == 'a' && t.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt');
     hints.push({text, location, domNode,
                 instructiveUri: instructiveTriple.predicate,
-                behandelingVanAgendapuntUri: instructiveTriple.subject,
+                behandelingVanAgendapuntUri: behandelingVanAgendapuntUri.subject,
                 options});
     return hints;
   },

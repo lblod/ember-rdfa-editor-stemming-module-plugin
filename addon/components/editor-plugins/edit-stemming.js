@@ -96,7 +96,6 @@ export default Component.extend({
     //Assumes array is ordened see https://www.w3.org/TR/selectors-api/#queryselectorall
     let nodes = this.editorRootNode.querySelectorAll(`[typeof="${propertyToQuery}"]`);
     let behandelingenVanAgendapunt = [];
-
     //get all behandelingenVanAgendapunt until the current one;
     for(let node of nodes){
       if(this.domNodeBehandelingAP.isSameNode(node)){
