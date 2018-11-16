@@ -17,7 +17,7 @@ export default Component.extend({
 
   geheim: computed('stemming.geheim', {
     get(){
-      return this.stemming.get('geheim') == "true" || false;
+      return this.stemming.get('geheim');
     },
 
     set(k, isGeheim){

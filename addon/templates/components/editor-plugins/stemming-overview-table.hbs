@@ -28,7 +28,7 @@
           <td>{{stemming.onderwerp}}</td>
           <td>{{stemming.gevolg}}</td>
           <td>
-            {{#if (is-truthy-str stemming.geheim)}}
+            {{#if stemming.geheim}}
               geheim
             {{else}}
               openbaar

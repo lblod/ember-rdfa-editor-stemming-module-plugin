@@ -10,10 +10,7 @@ import { reads } from '@ember/object/computed';
 export default Component.extend({
   layout,
   metaModelQuery: service(),
-  isSecret: computed('stemming.geheim', function(){
-    return this.stemming.get('geheim') == "true" || false;
-  }),
-
+  isSecret: reads('stemming.geheim'),
   isBusy: computed('loadData.isRunning', function(){
     return this.loadData.isRunning;
   }),

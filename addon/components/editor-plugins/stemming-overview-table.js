@@ -31,6 +31,9 @@ export default Component.extend({
 
   didReceiveAttrs() {
     this._super(...arguments);
+    if(this.stemmingen){
+      this.stemmingen.forEach(s => { if(typeof(s.geheim) == 'string') s.set('geheim', s.get('geheim') == 'true'); });
+    }
   },
 
   actions: {
