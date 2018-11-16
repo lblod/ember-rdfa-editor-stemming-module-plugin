@@ -45,6 +45,8 @@ export default Component.extend({
 
     for(let persoonUri of persoonUris){
       let row = await this.createRow(persoonUri);
+      if(!row)
+        continue;
       rows.push(row);
     }
     this.set('rows', A(rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim()))));
@@ -52,13 +54,16 @@ export default Component.extend({
 
   updateRowForNewPerson: task(function* (persoon){
     let row = yield this.createRow(persoon.uri);
-    this.rows.pushObject(row);
+    if(row) this.rows.pushObject(row);
     this.set('initAddPersoon', false);
     this.set('rows', this.rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim())));
   }),
 
   async createRow(persoonUri){
     let mandatarissen = await this.findMandatarissen(persoonUri);
+
+    if(mandatarissen.length == 0) return null;
+
     let selectedMandataris = this.stemming.aanwezigen.find(m => m.isBestuurlijkeAliasVan[0].uri == persoonUri);
 
     //set a default one
