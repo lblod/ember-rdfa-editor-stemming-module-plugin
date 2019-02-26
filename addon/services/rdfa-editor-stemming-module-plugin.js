@@ -1,6 +1,5 @@
-import { getOwner } from '@ember/application';
 import Service from '@ember/service';
-import EmberObject, { computed } from '@ember/object';
+import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isArray } from '@ember/array';
 import { warn } from '@ember/debug';
@@ -105,7 +104,6 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
         domNodeToUpdate: hint.domNode,
         instructiveUri: hint.instructiveUri,
         hrId, hintsRegistry, editor,
-        instructiveUri: hint.instructiveUri,
         behandelingVanAgendapuntUri: hint.behandelingVanAgendapuntUri
       },
       location: hint.location,

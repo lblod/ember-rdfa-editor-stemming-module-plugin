@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/mandataris-selector';
 import { computed } from '@ember/object';
-import { task } from 'ember-concurrency';
 
 export default Component.extend({
   layout,
@@ -11,7 +10,7 @@ export default Component.extend({
       return true;
     return false;
   }),
-  
+
   actions: {
     select(mandataris){
       this.onChange(mandataris);

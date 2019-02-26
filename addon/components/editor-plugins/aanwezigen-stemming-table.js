@@ -5,7 +5,6 @@ import EmberObject from '@ember/object';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import { reads } from '@ember/object/computed';
 import emberModelToGenericModel from '../../utils/ember-model-to-generic-model';
 
 export default Component.extend({
