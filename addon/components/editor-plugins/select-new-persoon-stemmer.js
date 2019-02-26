@@ -15,8 +15,9 @@ export default Component.extend({
   searchByName: task(function* (searchData) {
     yield timeout(300);
     let queryParams = {
-      sort:'achternaam',
+      sort: 'achternaam',
       filter: searchData,
+      'filter[is-aangesteld-als][bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
       page: { size: 100 },
       include: 'geboorte'
     };

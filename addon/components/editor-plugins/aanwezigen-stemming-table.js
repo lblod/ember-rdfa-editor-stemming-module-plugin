@@ -12,6 +12,7 @@ export default Component.extend({
   layout,
   metaModelQuery: service(),
   store: service(),
+  tripleSerialization: service('triplesSerializationUtils'),
 
   isBusy: computed('loadData.isRunning', 'updateRowForNewPerson.isRunning', function(){
     return this.loadData.isRunning || this.updateRowForNewPerson.isRunning;

@@ -2,7 +2,7 @@
   {{#unless initAddPersoon}}
     {{row.persoon.gebruikteVoornaam}} {{row.persoon.achternaam}}
   {{else}}
-    {{editor-plugins/select-new-persoon-stemmer onSelect=(action "selectNewPersoon")}}
+    {{editor-plugins/select-new-persoon-stemmer bestuursorgaan=bestuursorgaan onSelect=(action "selectNewPersoon")}}
   {{/unless}}
 </td>
 
