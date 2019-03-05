@@ -29,7 +29,7 @@ export default Component.extend({
     for(let apRef of apRefs){
       if(!apRef.attributes || !apRef.attributes.property)
         continue;
-      if(!apRef.attributes.property == 'besluit:heeftAgendapunt')
+      if(!apRef.attributes.property == 'besluit:behandelt')
         continue;
       return apRef;
     }
