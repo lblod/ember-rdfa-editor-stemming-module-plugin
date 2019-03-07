@@ -1,69 +1,92 @@
-<h2>Beheer stemming</h2>
-<div class="grid grid-collapse">
-  <div class="col--7-12">
-    <strong>Voorstanders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0 disabled=viewModeOpenbaar}}
-  </div>
-  <div class="col--7-12">
-    <strong>Tegenstanders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0 disabled=viewModeOpenbaar}}
-  </div>
-  <div class="col--7-12">
-    <strong>Onthouders</strong>
-    {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0 disabled=viewModeOpenbaar}}
-  </div>
-  <div class="col--7-12">
-    <label class="checkbox checkbox--block">
-    {{input class="checkbox__toggle" type="checkbox" checked=geheim }}
-    <span></span>
-    <strong>Geheim</strong>
-    </label>
-  </div>
-  <div class="col--7-12">
-    <strong>Onderwerp</strong>
-    {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=onderwerp}}
-  </div>
-  <div class="col--7-12">
-    <strong>Gevolg</strong>
-    {{textarea class="textarea textarea--block component" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
-  </div>
-  <div class="col--12-12">
-  <div class="grid">
-    <nav class="col--1-1" role="navigation" data-tabs>
-      <ul class="tabs tabs--block u-spacer--none" data-tabs-list>
-        <li class={{if manageAanwezigen "tab tab--active" "tab"}}>
-          <a class="tab__link" href="#" onclick={{action 'manageAanwezigen'}}>
-            Beheer aanwezigen en stemmers</a>
-        </li>
-        <li class={{if manageStemmers "tab tab--active" "tab"}}>
-          <a class="tab__link" href="#" onclick={{action 'manageStemmers'}}>
-            Beheer stemming</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  {{#if manageAanwezigen}}
-    {{editor-plugins/aanwezigen-stemming-table
-      stemming=stemming
-      mandatarissenInDocument=mandatarissenInDocument
-      personenInDocument=personenInDocument
-      bestuursorgaan=bestuursorgaan
-      onRemoveAanwezige=(action "removeAanwezige")
-      onRemoveStemmer=(action "removeStemmer")
-    }}
-  {{/if}}
-  {{#if manageStemmers}}
-    {{editor-plugins/manage-stemmers-table
-      stemming=stemming
-      onUpdate=(action "updateStemmer")
-    }}
-  {{/if}}
-  </div>
+<div class="u-padding--round--small">
+
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">1. Geef onderwerp in</h3>
+	<div class="form__row u-spacer">
+    <label class="form__label">De raad stemt,</label>
+    {{textarea class="textarea textarea--block" cols="40" rows="4" placeholder="Typ hier..." value=onderwerp}}
+
+	  <label class="checkbox checkbox--block u-spacer--tb--tiny">
+	    {{input class="checkbox__toggle" type="checkbox" checked=geheim }}
+	    <span></span>
+	    <span>Maak stemming geheim</span>
+	  </label>
+	</div>
+
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">2. Beheer aanwezigen en stemmen</h3>
+	<div class="form__row u-spacer">
+
+		{{#unless viewModeOpenbaar}}
+			<h4 class="u-spacer--bottom--small">Geef aanwezigen en stemmers in</h4>
+		{{/unless}}
+		{{#if manageAanwezigen}}
+			<div class="u-spacer--bottom--small">
+			  {{editor-plugins/aanwezigen-stemming-table
+			    stemming=stemming
+			    mandatarissenInDocument=mandatarissenInDocument
+			    personenInDocument=personenInDocument
+			    bestuursorgaan=bestuursorgaan
+			    onRemoveAanwezige=(action "removeAanwezige")
+			    onRemoveStemmer=(action "removeStemmer")
+			    onUpdate=(action "updateStemmer")
+			  }}
+			</div>
+
+			{{#if viewModeOpenbaar}}
+	    	{{#wu-button isNarrow=true onClick=(action 'manageStemmers')}}
+	      	Sla stemmers op en beheer stemmen
+	      {{/wu-button}}
+			{{/if}}
+		{{/if}}
+
+		{{#if manageStemmers}}
+			<div class="u-spacer--bottom--small">
+			  {{editor-plugins/manage-stemmers-table
+			    stemming=stemming
+			    onUpdate=(action "updateStemmer")
+			  }}
+			</div>
+
+    	{{#wu-button isAlt=true isNarrow=true onClick=(action 'manageAanwezigen')}}
+      	<i class="vi vi-arrow vi-u-180deg"></i> Ga terug en beheer aanwezigen
+      {{/wu-button}}
+		{{/if}}
+
+		{{#unless viewModeOpenbaar}}
+			<h4 class="u-spacer--bottom--tiny">Geef stemmen in</h4>
+			<div class="grid">
+				<div class="col--4-12">
+				  <label class="form__label">Voorstanders</label>
+				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0 disabled=viewModeOpenbaar}}
+				</div>
+				<div class="col--4-12">
+				  <label class="form__label">Tegenstanders</label>
+				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0 disabled=viewModeOpenbaar}}
+				</div>
+				<div class="col--4-12">
+				  <label class="form__label">Onthouders</label>
+				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0 disabled=viewModeOpenbaar}}
+				</div>
+			</div>
+	  {{/unless}}
+	</div>
+
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">3. Geef gevolg in</h3>
+	<div class="form__row u-spacer">
+		<label class="form__label">Met als gevolg,</label>
+    {{textarea class="textarea textarea--block" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
+	</div>
+
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">4. Bewaar stemming</h3>
+	{{#wu-button-group class="u-spacer"}}
+	  {{#wu-button isNarrow=true onClick=(action 'save')}}<i class="vi vi-check vi-u-s"></i> Sla stemming op{{/wu-button}}
+	  {{#wu-button isNarrow=true isAlt=true onClick=(action 'cancel')}}Annuleer{{/wu-button}}
+	{{/wu-button-group}}
 </div>
-<div class="col--7-12 u-align--left">
-  {{#wu-button-group}}
-    {{#wu-button class="button--narrow button--small" onClick=(action 'save')}}<i class="vi vi-plus"></i>Bewaar{{/wu-button}}
-    {{#wu-button class="button--alt button--small button--narrow" onClick=(action 'cancel')}}Annuleer{{/wu-button}}
-  {{/wu-button-group}}
-</div>
+
+{{!-- TODO: These buttons should be on the bottom of this card when editing or creating a new stemming, and not the "voeg stemmingen in", because it is unclear --}}
+{{!-- TODO:
+		New stemming:
+		"Voeg nieuwe stemming toe" en "Annuleer"
+		Edit stemming:
+		"Bewaar" en "Verwerp wijzigingen" --}}
 {{yield}}

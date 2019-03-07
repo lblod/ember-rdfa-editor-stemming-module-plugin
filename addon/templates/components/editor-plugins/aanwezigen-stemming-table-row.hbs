@@ -20,29 +20,33 @@
     {{#wu-button-group}}
 
       {{#unless row.isAanwezigeStemmer}}
-        {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "addStemmer")}}
-          <i class="vi vi-plus vi-u-s"></i>Voeg stemmer toe
+        {{#wu-link-button isSmall=true isNarrow=true onClick=(action "addStemmer")}}
+          <i class="vi vi-plus vi-u-s"></i> Geef stemrecht
         {{/wu-link-button}}
       {{else}}
-        {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "removeStemmer")}}
-          <i class="vi vi-cross vi-u-s"></i>Verwijder stemmer
+        {{#wu-link-button isWarning=true isSmall=true isNarrow=true onClick=(action "removeStemmer")}}
+          <i class="vi vi-cross vi-u-s"></i> Verwijder stemrecht
         {{/wu-link-button}}
       {{/unless}}
 
-      {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "removeAanwezige")}}
-        <i class="vi vi-cross vi-u-s"></i>Verwijder aanwezige
+      {{#wu-link-button isSmall=true isAlt=true isNarrow=true onClick=(action "removeAanwezige")}}
+        <i class="vi vi-cross vi-u-s"></i> Verwijder als aanwezige
       {{/wu-link-button}}
     {{/wu-button-group}}
   {{else}}
     {{#wu-button-group}}
       {{#if newPersoon}}
-        {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "saveNewPersoon")}}
-          <i class="vi vi-plus vi-u-s"></i>Voeg persoon toe
+        {{#wu-link-button isSmall=true isNarrow=true onClick=(action "saveNewPersoon")}}
+          <i class="vi vi-plus vi-u-s"></i> Bevestig aanwezige
         {{/wu-link-button}}
       {{/if}}
-      {{#wu-link-button class="button--small button--alt" isNarrow=true onClick=(action "cancelAddPersoon")}}
-        <i class="vi vi-cross vi-u-s"></i>Annuleer
+      {{#wu-link-button isSmall=true isAlt=true isNarrow=true onClick=(action "cancelAddPersoon")}}
+        <i class="vi vi-cross vi-u-s"></i> Annuleer
       {{/wu-link-button}}
     {{/wu-button-group}}
   {{/unless}}
+
+{{!-- 	{{#unless isSecret}}
+		{{editor-plugins/stem-property-selector stemProperty=row.selectedStemBehaviour onSelect=(action "updateStembehaviour")}}
+	{{/unless}} --}}
 </td>
