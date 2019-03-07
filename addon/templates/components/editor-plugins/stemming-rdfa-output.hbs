@@ -1,9 +1,9 @@
-<h2>Overzicht stemming</h2>
 <div resource={{behandelingVanAgendapuntUri}} typeof="besluit:BehandelingVanAgendapunt">
   {{#each stemmingen as |stemming|}}
+  <br>
   <div property="besluit:heeftStemming" resource={{stemming.uri}} typeof={{stemming._meta_generic_model.class.rdfaType}}>
 		<p property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
-			Stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
+			De raad stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
 		</p>
 		<!-- TODO nieuwe stijl:
 		<h5 property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
@@ -11,10 +11,7 @@
 		</h5>
 		-->
 		<br>
-
-		<div>
-      <p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
-    </div>
+		<p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
 
 		<!-- TODO nieuwe stijl:
 		<div>
@@ -60,7 +57,7 @@
     <p>
       <strong>Effectieve stemmers</strong>
     </p>
-    <p>
+    <p class="small">
       {{#each stemming.stemmers as |mandataris|}}
         <span property="besluit:heeftStemmer" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -100,7 +97,7 @@
 	    <p>
 	      <strong>Voorstanders</strong>
 	    </p>
-	    <p class="smaller">
+	    <p class="smaller u-spacer--small">
         {{#each stemming.voorstanders as |mandataris|}}
           <span property="besluit:heeftVoorstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -130,7 +127,7 @@
       <p>
 	      <strong>Tegenstanders</strong>
 	    </p>
-	    <p class="smaller">
+	    <p class="smaller u-spacer--small">
         {{#each stemming.tegenstanders as |mandataris|}}
           <span property="besluit:heeftTegenstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -160,7 +157,7 @@
 	    <p>
 	      <strong>Onthoudingen, blanco of ongeldig</strong>
 	    </p>
-	    <p class="smaller">
+	    <p class="smaller u-spacer--small">
         {{#each stemming.onthouders as |mandataris|}}
           <span property="besluit:heeftOnthouder" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -187,19 +184,12 @@
           </span>,&nbsp;
         {{/each}}
       </p>
-			<br>
-			<br>
     {{/unless}}
 
 		<p>Met als gevolg,</p>
     <div>
 			<p property="besluit:gevolg">{{stemming.gevolg}}</p>
 		</div>
-
-
-		<br>
-		<br>
-		<br>
 
 		<!-- TODO: nieuwe stijl
 		<h6>Gevolg stemming</h6>
@@ -209,5 +199,6 @@
 		<br>
 		<br> -->
   </div>
+  <br>
   {{/each}}
 </div>
