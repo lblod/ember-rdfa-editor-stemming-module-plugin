@@ -14,7 +14,7 @@ export default Component.extend({
   tripleSerialization: service('triplesSerializationUtils'),
   manageAanwezigen: true,
   manageStemmers: false,
-
+  tagName: '',
   geheim: computed('stemming.geheim', {
     get(){
       return this.stemming.get('geheim');
