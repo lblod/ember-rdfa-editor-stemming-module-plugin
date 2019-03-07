@@ -8,6 +8,7 @@ import { A } from '@ember/array';
 
 export default Component.extend({
   layout,
+  tagName: '',
   metaModelQuery: service(),
   tripleSerialization: service('triplesSerializationUtils'),
 
