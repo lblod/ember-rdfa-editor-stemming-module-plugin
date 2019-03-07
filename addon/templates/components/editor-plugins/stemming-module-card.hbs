@@ -32,11 +32,11 @@
 
 {{# if popup}}
   {{#wu-modal
-     title="Beheer stemmingen"
+     title="Beheer stemmingen bij agendapunt"
      dialog-class="modal-dialog--wide modal-dialog--sectioned"
      onClose=(action 'togglePopup')
      as |m|}}
-    {{#m.content isSectioned=false}}
+    {{#m.content isSectioned=true}}
       {{editor-plugins/stemming-container
         editorRootNode=editor.rootNode
         bestuurseenheid=bestuurseenheid
