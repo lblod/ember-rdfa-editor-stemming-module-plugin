@@ -1,3 +1,4 @@
+<h3 class="h6">Stemmingen</h3>
 <div resource={{behandelingVanAgendapuntUri}} typeof="besluit:BehandelingVanAgendapunt">
   {{#each stemmingen as |stemming|}}
   <br>
@@ -97,7 +98,7 @@
 	    <p>
 	      <strong>Voorstanders</strong>
 	    </p>
-	    <p class="smaller u-spacer--small">
+	    <p class="small u-spacer--small">
         {{#each stemming.voorstanders as |mandataris|}}
           <span property="besluit:heeftVoorstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -127,7 +128,7 @@
       <p>
 	      <strong>Tegenstanders</strong>
 	    </p>
-	    <p class="smaller u-spacer--small">
+	    <p class="small u-spacer--small">
         {{#each stemming.tegenstanders as |mandataris|}}
           <span property="besluit:heeftTegenstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -157,7 +158,7 @@
 	    <p>
 	      <strong>Onthoudingen, blanco of ongeldig</strong>
 	    </p>
-	    <p class="smaller u-spacer--small">
+	    <p class="small u-spacer--small">
         {{#each stemming.onthouders as |mandataris|}}
           <span property="besluit:heeftOnthouder" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 

@@ -1,6 +1,6 @@
 <div class="u-padding--round--small">
 
-	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">1. Geef onderwerp in</h3>
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--tb--tiny">1. Geef onderwerp in</h3>
 	<div class="form__row u-spacer">
     <label class="form__label">De raad stemt,</label>
     {{textarea class="textarea textarea--block" cols="40" rows="4" placeholder="Typ hier..." value=onderwerp}}
@@ -12,14 +12,14 @@
 	  </label>
 	</div>
 
-	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">2. Beheer aanwezigen en stemmen</h3>
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--tb--tiny">2. Beheer aanwezigen en stemmen</h3>
 	<div class="form__row u-spacer">
 
 		{{#unless viewModeOpenbaar}}
-			<h4 class="u-spacer--bottom--small">Geef aanwezigen en stemmers in</h4>
+			<h4 class="h6 u-spacer--tb--small">Geef aanwezigen en stemmers in</h4>
 		{{/unless}}
 		{{#if manageAanwezigen}}
-			<div class="u-spacer--bottom--small">
+			<div class="u-spacer--tb--small">
 			  {{editor-plugins/aanwezigen-stemming-table
 			    stemming=stemming
 			    mandatarissenInDocument=mandatarissenInDocument
@@ -33,13 +33,13 @@
 
 			{{#if viewModeOpenbaar}}
 	    	{{#wu-button isNarrow=true onClick=(action 'manageStemmers')}}
-	      	Sla stemmers op en beheer stemmen
+	      	Sla stemmers op en beheer stemmen <i class="vi vi-arrow"></i>
 	      {{/wu-button}}
 			{{/if}}
 		{{/if}}
 
 		{{#if manageStemmers}}
-			<div class="u-spacer--bottom--small">
+			<div class="u-spacer--tb--small">
 			  {{editor-plugins/manage-stemmers-table
 			    stemming=stemming
 			    onUpdate=(action "updateStemmer")
@@ -47,38 +47,41 @@
 			</div>
 
     	{{#wu-button isAlt=true isNarrow=true onClick=(action 'manageAanwezigen')}}
-      	<i class="vi vi-arrow vi-u-180deg"></i> Ga terug en beheer aanwezigen
+      	<i class="vi vi-arrow vi-u-180deg"></i>Ga terug om aanwezigen te beheren
       {{/wu-button}}
 		{{/if}}
 
 		{{#unless viewModeOpenbaar}}
-			<h4 class="u-spacer--bottom--tiny">Geef stemmen in</h4>
-			<div class="grid">
-				<div class="col--4-12">
-				  <label class="form__label">Voorstanders</label>
-				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0 disabled=viewModeOpenbaar}}
-				</div>
-				<div class="col--4-12">
-				  <label class="form__label">Tegenstanders</label>
-				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0 disabled=viewModeOpenbaar}}
-				</div>
-				<div class="col--4-12">
-				  <label class="form__label">Onthouders</label>
-				  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0 disabled=viewModeOpenbaar}}
+			<div class="u-spacer--tb">
+				<h4 class="h6 u-spacer--bottom--tiny">Geef aantal stemmen in</h4>
+				<div class="grid">
+					<div class="col--4-12">
+					  <label class="form__label">Voorstanders</label>
+					  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalVoorstanders min=0 disabled=viewModeOpenbaar}}
+					</div>
+					<div class="col--4-12">
+					  <label class="form__label">Tegenstanders</label>
+					  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalTegenstanders min=0 disabled=viewModeOpenbaar}}
+					</div>
+					<div class="col--4-12">
+					  <label class="form__label">Onthouders</label>
+					  {{input class="input-field input-field--block" placeholder="0" type="number" value=aantalOnthouders min=0 disabled=viewModeOpenbaar}}
+					</div>
 				</div>
 			</div>
 	  {{/unless}}
 	</div>
 
-	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">3. Geef gevolg in</h3>
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--tb--tiny">3. Geef gevolg in</h3>
 	<div class="form__row u-spacer">
 		<label class="form__label">Met als gevolg,</label>
     {{textarea class="textarea textarea--block" cols="40" rows="4" placeholder="Typ hier..." value=gevolg}}
 	</div>
 
-	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--bottom--tiny">4. Bewaar stemming</h3>
+	<h3 class="u-background--gray-lighter u-padding--round--tiny u-spacer--tb--tiny">4. Bewaar stemming</h3>
+	<p class="smaller u-spacer">Uw wijzigingen worden niet ingevoegd tot u op <strong>Bewaar stemming</strong> klikt.</p>
 	{{#wu-button-group class="u-spacer"}}
-	  {{#wu-button isNarrow=true onClick=(action 'save')}}<i class="vi vi-check vi-u-s"></i> Sla stemming op{{/wu-button}}
+	  {{#wu-button isNarrow=true onClick=(action 'save')}}<i class="vi vi-check vi-u-s"></i> Bewaar stemming{{/wu-button}}
 	  {{#wu-button isNarrow=true isAlt=true onClick=(action 'cancel')}}Annuleer{{/wu-button}}
 	{{/wu-button-group}}
 </div>
