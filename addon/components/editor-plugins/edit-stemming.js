@@ -186,6 +186,11 @@ export default Component.extend({
         this.stemming.set('tegenstanders', A());
         this.stemming.set('onthouders', A());
       }
+
+      (!this.stemming.aantalTegenstanders) && this.stemming.set('aantalTegenstanders', 0);
+      (!this.stemming.aantalOnthouders) && this.stemming.set('aantalOnthouders', 0);
+      (!this.stemming.aantalVoorstanders) && this.stemming.set('aantalVoorstanders', 0);
+
       this.onSave(this.stemming);
     },
 

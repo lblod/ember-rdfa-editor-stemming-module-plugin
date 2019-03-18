@@ -1,7 +1,6 @@
 @lblod/ember-rdfa-editor-stemming-module-plugin
 ==============================================================================
 
-[Short description of the addon.]
 Plugin to manage 'stemming' in a BehandelingVanAgendapunt
 
 
