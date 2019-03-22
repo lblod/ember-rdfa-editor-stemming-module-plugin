@@ -17,6 +17,22 @@ export default Component.extend({
     return this.loadData.isRunning || this.updateRowForNewPerson.isRunning;
   }),
 
+  async fetchMandatarissen() {
+    let mandatarissen = this.mandatarissenInDocument;
+    let mandatarissenBackend = await this.store.query('mandataris', {
+      'filter[bekleedt][bevat-in][:uri:]': this.bestuursorgaan.uri,
+      page: { size: 300 }
+    });
+    for(let mandataris of mandatarissenBackend.toArray()){
+      let m = await emberModelToGenericModel(this.tripleSerialization,
+                                             this.metaModelQuery,
+                                             mandataris,
+                                             ['bekleedt.bestuursfunctie', 'isBestuurlijkeAliasVan']);
+      mandatarissen.push(m);
+    }
+    return mandatarissen;
+  },
+
   async findMandatarissen(persoonUri){
     let mandatarissen = this.mandatarissenInDocument.filter(m => m.get('isBestuurlijkeAliasVan.0.uri') == persoonUri);
     let mandatarissenBackend = await this.store.query('mandataris', {
@@ -36,15 +52,26 @@ export default Component.extend({
   async constructRows(){
     //TODO: cleanup to generic groupBy
     let persoonUris = this.stemming.aanwezigen.map(m => m.isBestuurlijkeAliasVan[0].uri);
+
+    let mandatarissenUris = A();
     if(persoonUris.length == 0)
-      persoonUris = this.personenInDocument.map(p => p.uri);
+      mandatarissenUris = this.mandatarissenInDocument.map(p => p.uri);
 
     persoonUris = Array.from(new Set(persoonUris));
+    mandatarissenUris = Array.from(new Set(mandatarissenUris));
 
     let rows = [];
 
+    let fetchedMandatarissen = this.fetchMandatarissen();
+
     for(let persoonUri of persoonUris){
       let row = await this.createRow(persoonUri);
+      if(!row)
+        continue;
+      rows.push(row);
+    }
+    for(let mandatarissenUri of mandatarissenUris){
+      let row = await this.createRow(mandatarissenUri, fetchedMandatarissen);
       if(!row)
         continue;
       rows.push(row);
@@ -59,12 +86,17 @@ export default Component.extend({
     this.set('rows', this.rows.sort((a,b) => a.persoon.gebruikteVoornaam.trim().localeCompare(b.persoon.gebruikteVoornaam.trim())));
   }),
 
-  async createRow(persoonUri){
-    let mandatarissen = await this.findMandatarissen(persoonUri);
+  async createRow(aanwezigeUri, fetchedMandatarissen = A()) {
+    let mandatarissen = A();
 
-    if(mandatarissen.length == 0) return null;
+    if(fetchedMandatarissen.length != 0) {
+      mandatarissen = this.mandatarissenInDocument.filter(m => m.uri == aanwezigeUri);
+    } else {
+      mandatarissen = await this.findMandatarissen(aanwezigeUri);
+      if(mandatarissen.length == 0) return null;
+    }
 
-    let selectedMandataris = this.stemming.aanwezigen.find(m => m.isBestuurlijkeAliasVan[0].uri == persoonUri);
+    let selectedMandataris = this.stemming.aanwezigen.find(m => m.isBestuurlijkeAliasVan[0].uri == aanwezigeUri);
 
     //set a default one
     if(!selectedMandataris){
