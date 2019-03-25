@@ -30,7 +30,7 @@
   {{/wu-button-group}}
 </div>
 
-{{# if popup}}
+{{#if popup}}
   {{#wu-modal
      title="Beheer stemmingen bij agendapunt"
      dialog-class="modal-dialog--wide modal-dialog--sectioned"
@@ -45,12 +45,13 @@
         behandelingVanAgendapuntUri=info.behandelingVanAgendapuntUri
         outputId=outputId
         domTable=info.domNodeToUpdate
+        disableButtons=(action 'disableButtons')
       }}
     {{/m.content}}
     <div class="modal-dialog__footer">
       {{#wu-button-group}}
-        {{wu-button label="Voeg stemmingen in" class="button button--narrow" onClick=(action 'insert')}}
-        {{wu-button label="Annuleer" class="button button--alt button--narrow" onClick=(action 'togglePopup')}}
+        {{wu-button label="Voeg stemmingen in" class="button button--narrow (if disabledButtons disabled)" onClick=(action 'insert') disabled=disabledButtons}}
+        {{wu-button label="Annuleer" class="button button--alt button--narrow (if disabledButtons disabled)" onClick=(action 'togglePopup') disabled=disabledButtons}}
       {{/wu-button-group}}
     </div>
   {{/wu-modal}}

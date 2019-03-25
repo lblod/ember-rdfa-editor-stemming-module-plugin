@@ -54,6 +54,8 @@ export default Component.extend({
 
   bestuursorgaanUri: reads('rdfaEditorAanwezigenPlugin.bestuursorgaanUri'),
 
+  disabledButtons: false,
+
   async setProperties() {
     let bestuurseenheid = ( await this.store.query('bestuurseenheid',
                                            { 'filter[bestuursorganen][heeft-tijdsspecialisaties][:uri:]': this.bestuursorgaanUri }
@@ -88,6 +90,9 @@ export default Component.extend({
     },
     togglePopup(){
        this.toggleProperty('popup');
+    },
+    disableButtons(){
+      this.set('disabledButtons', !this.disabledButtons);
     }
   }
 });

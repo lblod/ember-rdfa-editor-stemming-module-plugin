@@ -144,6 +144,7 @@ export default Component.extend({
     if(!this.domNodeBehandelingAP)
       return;
     this.loadData.perform();
+    this.disableButtons();
   },
 
   updateCountStemBehaviour(){
@@ -192,6 +193,7 @@ export default Component.extend({
       (!this.stemming.aantalVoorstanders) && this.stemming.set('aantalVoorstanders', 0);
 
       this.onSave(this.stemming);
+      this.disableButtons();
     },
 
     cancel(){
