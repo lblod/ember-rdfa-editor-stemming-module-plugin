@@ -18,7 +18,6 @@
 <td>
   {{#unless initAddPersoon}}
     {{#wu-button-group}}
-
       {{#unless row.isAanwezigeStemmer}}
         {{#wu-link-button isSmall=true isNarrow=true onClick=(action "addStemmer")}}
           <i class="vi vi-plus vi-u-s"></i> Geef stemrecht
@@ -28,10 +27,10 @@
           <i class="vi vi-cross vi-u-s"></i> Verwijder stemrecht
         {{/wu-link-button}}
       {{/unless}}
-
+      {{!-- Disabled to decrease complexity
       {{#wu-link-button isSmall=true isAlt=true isNarrow=true onClick=(action "removeAanwezige")}}
         <i class="vi vi-cross vi-u-s"></i> Verwijder als aanwezige
-      {{/wu-link-button}}
+      {{/wu-link-button}} --}}
     {{/wu-button-group}}
   {{else}}
     {{#wu-button-group}}
