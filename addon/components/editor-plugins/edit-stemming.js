@@ -197,6 +197,7 @@ export default Component.extend({
     },
 
     cancel(){
+      this.disableButtons();
       this.onCancel();
     }
   }

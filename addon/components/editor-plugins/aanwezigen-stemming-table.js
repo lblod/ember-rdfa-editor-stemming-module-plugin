@@ -62,7 +62,7 @@ export default Component.extend({
 
     let rows = [];
 
-    let fetchedMandatarissen = this.fetchMandatarissen();
+    let fetchedMandatarissen = await this.fetchMandatarissen();
 
     for(let persoonUri of persoonUris){
       let row = await this.createRow(persoonUri);
@@ -91,6 +91,8 @@ export default Component.extend({
 
     if(fetchedMandatarissen.length != 0) {
       mandatarissen = this.mandatarissenInDocument.filter(m => m.uri == aanwezigeUri);
+      // Clean mandatarissen with null values, from which we can't fetch the needed information
+      mandatarissen = mandatarissen.filter((m) => (m.rangorde !== null));
     } else {
       mandatarissen = await this.findMandatarissen(aanwezigeUri);
       if(mandatarissen.length == 0) return null;
