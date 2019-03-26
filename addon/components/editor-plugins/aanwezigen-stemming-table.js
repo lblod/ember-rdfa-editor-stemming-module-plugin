@@ -104,6 +104,8 @@ export default Component.extend({
     if(!selectedMandataris){
       selectedMandataris = mandatarissen[0];
       this.stemming.aanwezigen.pushObject(selectedMandataris);
+      // Set every mandataris as a stemmer by default
+      this.stemming.stemmers.pushObject(selectedMandataris);
     }
 
     let isAanwezigeStemmer = this.stemming.stemmers.find(m => selectedMandataris.uri == m.uri) ? true : false;
