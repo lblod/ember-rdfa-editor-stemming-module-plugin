@@ -1,26 +1,25 @@
-<div resource={{behandelingVanAgendapuntUri}} typeof="besluit:BehandelingVanAgendapunt">
-  {{#each stemmingen as |stemming|}}
+{{#each stemmingen as |stemming|}}
   <br>
   <div property="besluit:heeftStemming" resource={{stemming.uri}} typeof={{stemming._meta_generic_model.class.rdfaType}}>
-		<p property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
-			De raad stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
-		</p>
-		<!-- TODO nieuwe stijl:
+    <p property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
+      De raad stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
+    </p>
+    <!-- TODO nieuwe stijl:
 		<h5 property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
 			{{#if stemming.geheim}}Geheime{{else}}Openbare{{/if}} stemming
 		</h5>
 		-->
-		<br>
-		<p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
+    <br>
+    <p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
 
-		<!-- TODO nieuwe stijl:
+    <!-- TODO nieuwe stijl:
 		<div>
 			<h6>Onderwerp van de stemming</h6>
 			<p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
 		</div>
 		<br>
 		-->
-		<br>
+    <br>
 
     <p>
       <strong>Aanwezigen tijdens stemming</strong>
@@ -29,23 +28,19 @@
       {{#each stemming.aanwezigen as |mandataris|}}
         <span property="besluit:heeftAanwezige" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
-          <span property="mandaat:isBestuurlijkeAliasVan"
-            resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
-            typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
+          <span property="mandaat:isBestuurlijkeAliasVan" resource={{mandataris.isBestuurlijkeAliasVan.0.uri}} typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
 
-              <span property="persoon:gebruikteVoornaam">
-                {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
-              </span>
+            <span property="persoon:gebruikteVoornaam">
+              {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
+            </span>
 
-              <span property="foaf:familyName">
-                {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
-              </span>
+            <span property="foaf:familyName">
+              {{mandataris.isBestuurlijkeAliasVan.0.achternaam}}
+            </span>
 
           </span>
           (<span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class.rdfaType}}>
-            <span property="org:role"
-              resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
-              typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
+            <span property="org:role" resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}} typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
               <span property="skos:prefLabel">{{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
             </span>
           </span>)
@@ -61,9 +56,7 @@
       {{#each stemming.stemmers as |mandataris|}}
         <span property="besluit:heeftStemmer" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
-          <span property="mandaat:isBestuurlijkeAliasVan"
-            resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
-            typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
+          <span property="mandaat:isBestuurlijkeAliasVan" resource={{mandataris.isBestuurlijkeAliasVan.0.uri}} typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
 
             <span property="persoon:gebruikteVoornaam">
               {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
@@ -75,9 +68,7 @@
 
           </span>
           (<span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class.rdfaType}}>
-            <span property="org:role"
-              resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
-              typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
+            <span property="org:role" resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}} typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
               <span property="skos:prefLabel">{{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
             </span>
           </span>)
@@ -94,16 +85,14 @@
     </p>
     <br>
     {{#unless stemming.geheim}}
-	    <p>
-	      <strong>Voorstanders</strong>
-	    </p>
-	    <p class="small u-spacer--small">
+      <p>
+        <strong>Voorstanders</strong>
+      </p>
+      <p class="small u-spacer--small">
         {{#each stemming.voorstanders as |mandataris|}}
           <span property="besluit:heeftVoorstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
-            <span property="mandaat:isBestuurlijkeAliasVan"
-              resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
-              typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
+            <span property="mandaat:isBestuurlijkeAliasVan" resource={{mandataris.isBestuurlijkeAliasVan.0.uri}} typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
 
               <span property="persoon:gebruikteVoornaam">
                 {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
@@ -115,9 +104,7 @@
 
             </span>
             (<span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class.rdfaType}}>
-              <span property="org:role"
-                resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
-                typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
+              <span property="org:role" resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}} typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
                 <span property="skos:prefLabel">{{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
               </span>
             </span>)
@@ -125,15 +112,13 @@
         {{/each}}
       </p>
       <p>
-	      <strong>Tegenstanders</strong>
-	    </p>
-	    <p class="small u-spacer--small">
+        <strong>Tegenstanders</strong>
+      </p>
+      <p class="small u-spacer--small">
         {{#each stemming.tegenstanders as |mandataris|}}
           <span property="besluit:heeftTegenstander" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
-            <span property="mandaat:isBestuurlijkeAliasVan"
-              resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
-              typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
+            <span property="mandaat:isBestuurlijkeAliasVan" resource={{mandataris.isBestuurlijkeAliasVan.0.uri}} typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
 
               <span property="persoon:gebruikteVoornaam">
                 {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
@@ -145,25 +130,21 @@
 
             </span>
             (<span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class.rdfaType}}>
-              <span property="org:role"
-                resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
-                typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
+              <span property="org:role" resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}} typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
                 <span property="skos:prefLabel">{{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
               </span>
             </span>)
           </span>,&nbsp;
         {{/each}}
       </p>
-	    <p>
-	      <strong>Onthoudingen, blanco of ongeldig</strong>
-	    </p>
-	    <p class="small u-spacer--small">
+      <p>
+        <strong>Onthoudingen, blanco of ongeldig</strong>
+      </p>
+      <p class="small u-spacer--small">
         {{#each stemming.onthouders as |mandataris|}}
           <span property="besluit:heeftOnthouder" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
-            <span property="mandaat:isBestuurlijkeAliasVan"
-              resource={{mandataris.isBestuurlijkeAliasVan.0.uri}}
-              typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
+            <span property="mandaat:isBestuurlijkeAliasVan" resource={{mandataris.isBestuurlijkeAliasVan.0.uri}} typeof={{mandataris.isBestuurlijkeAliasVan.0._meta_generic_model.class.rdfaType}}>
 
               <span property="persoon:gebruikteVoornaam">
                 {{mandataris.isBestuurlijkeAliasVan.0.gebruikteVoornaam}}
@@ -175,9 +156,7 @@
 
             </span>
             (<span property="org:holds" resource={{mandataris.bekleedt.0.uri}} typeof={{mandataris.bekleedt.0._meta_generic_model.class.rdfaType}}>
-              <span property="org:role"
-                resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}}
-                typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
+              <span property="org:role" resource={{mandataris.bekleedt.0.bestuursfunctie.0.uri}} typeof={{mandataris.bekleedt.0.bestuursfunctie.0._meta_generic_model.class.rdfaType}}>
                 <span property="skos:prefLabel">{{mandataris.bekleedt.0.bestuursfunctie.0.label}}</span>
               </span>
             </span>)
@@ -186,12 +165,12 @@
       </p>
     {{/unless}}
 
-		<p>Met als gevolg,</p>
+    <p>Met als gevolg,</p>
     <div>
-			<p property="besluit:gevolg">{{stemming.gevolg}}</p>
-		</div>
+      <p property="besluit:gevolg">{{stemming.gevolg}}</p>
+    </div>
 
-		<!-- TODO: nieuwe stijl
+    <!-- TODO: nieuwe stijl
 		<h6>Gevolg stemming</h6>
 		<p property="stemming:gevolg">
 			{{stemming.gevolg}}
@@ -200,5 +179,4 @@
 		<br> -->
   </div>
   <br>
-  {{/each}}
-</div>
+{{/each}}
