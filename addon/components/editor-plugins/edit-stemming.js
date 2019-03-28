@@ -106,8 +106,12 @@ export default Component.extend({
   },
 
   async findMandatarissenInDocument(triples){
+    let afwezigen = triples
+        .filter(t =>  t.predicate == 'http://mu.semte.ch/vocabularies/ext/heeftAfwezigeBijAgendapunt')
+        .map(t => t.object);
+    let triplesOnlyAanwezigen = triples.filter(t => !afwezigen.find(uri => t.subject == uri));
     let metaModelM = await this.metaModelQuery.getMetaModelForLabel("Mandataris");
-    return this.tripleSerialization.getAllResourcesForType(metaModelM.rdfaType, triples, true);
+    return this.tripleSerialization.getAllResourcesForType(metaModelM.rdfaType, triplesOnlyAanwezigen, true);
   },
 
   loadData: task(function*(){
