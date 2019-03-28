@@ -86,28 +86,8 @@ export default Component.extend({
     }
   }),
 
-  //TODO: apply business rules which orgaan which mandataris is allowed
-  //TODO: performance -> make sure context scanner runs only once
-  //TODO: adding person should be scoped to the ones having a mandaat within context
-  //TODO: check if datatype is done by rdfaContext
-  //TODO: strip strings from triple
-  getAllTriplesBehandelingenVanAgendapuntUntilCurrent(){
-    let propertyToQuery = 'besluit:BehandelingVanAgendapunt'; //TODO: this is naive take also uri's into account
-    //Assumes array is ordened see https://www.w3.org/TR/selectors-api/#queryselectorall
-    let nodes = this.editorRootNode.querySelectorAll(`[typeof="${propertyToQuery}"]`);
-    let behandelingenVanAgendapunt = [];
-    //get all behandelingenVanAgendapunt until the current one;
-    for(let node of nodes){
-      if(this.domNodeBehandelingAP.isSameNode(node)){
-        behandelingenVanAgendapunt.push(node);
-        break;
-      }
-      behandelingenVanAgendapunt.push(node);
-    }
-
-    let allTriplesSoFar = [];
-    behandelingenVanAgendapunt.forEach(n => allTriplesSoFar = [...allTriplesSoFar, ...this.serializeDomToTriples(n)] );
-    return allTriplesSoFar;
+  getAllTriplesBehandelingenVanAgendapunt(){
+    return this.serializeDomToTriples(this.domNodeBehandelingAP);
   },
 
   async personenInAgendapunt(){
@@ -132,7 +112,7 @@ export default Component.extend({
 
   loadData: task(function*(){
     let personen = yield this.personenInAgendapunt();
-    let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapuntUntilCurrent();
+    let allTriplesSoFar = this.getAllTriplesBehandelingenVanAgendapunt();
     allTriplesSoFar.forEach(t => t.object = t.object.trim());
     let mandatarissen = yield this.findMandatarissenInDocument(allTriplesSoFar);
     this.set('mandatarissenInDocument', mandatarissen);
