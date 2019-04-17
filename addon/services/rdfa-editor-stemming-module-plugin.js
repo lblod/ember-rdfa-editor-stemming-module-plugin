@@ -6,8 +6,39 @@ import { warn } from '@ember/debug';
 import ascendDomUntil from '../utils/ascend-dom-until';
 
 /**
- * Service responsible for correct annotation of dates
+ * Service responsible for correct management of a stemming
+ * ---------------------------------------------------
+ * CODE REVIEW NOTES
+ * ---------------------------------------------------
  *
+ *  INTERACTION PATTERNS
+ *  --------------------
+ *  For all incoming contexts, first looks whether there is an rdfa instructive to manage stemming.
+ *  If encountered, a hint is set on the content of the instructive, the DOM node is passed to the card.
+ *  Once loaded, the management occurs in a modal. On insert the dom node is updated/replaced.
+ *
+ *  This plugin uses the document as a datastore (along with the normal backend):
+ *   - on edit, to keep track of which stemmers have already been inserted
+ *   - on create copy potential stemmers from aanwezigen at agendapunt
+ *   - on create/edit: copy some the content (title agendapunt) in the manage modal
+ *
+ *  POTENTIAL ISSUES/TODO
+ *  ---------------------
+ *  - The domNode is passed to the card. At insertion time, the domNode may be detached from tree, which results in broken plugin.
+ *
+ *   - Performance: A scan on RDFA content is slow once we have a lot of aanwezigen
+ *
+ *  - The whole voting is a complex use case. Moreover, it has been translated in code vomit (@thx felix :-) and needs a rewrite.
+ *    Furthermore, the current RDFA output clutters the whole document and will be in need of a complex serialization to
+ *    an inline component, untested so far
+ *
+ *  OTHER INFO
+ *  ----------
+ *  - uses metamodel plugin utils to:
+ *    deserialize triples to ember object
+ * ---------------------------------------------------
+ * END CODE REVIEW NOTES
+ * ---------------------------------------------------
  * @module editor-stemming-module-plugin
  * @class RdfaEditorStemmingModulePlugin
  * @constructor
