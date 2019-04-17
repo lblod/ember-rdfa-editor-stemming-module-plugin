@@ -2,10 +2,10 @@
   <table class="data-table data-table--lined data-table--zebra">
     <thead>
       <tr>
-        <th>Onderwerp</th>
+        <th style="max-width: 30rem;">Onderwerp</th>
         <th>Type</th>
         <th>Stemmen</th>
-        <th>Gevolg</th>
+        <th style="max-width: 30rem;">Gevolg</th>
         <th>
           <div class="grid">
             <div class="col--4-12">
@@ -23,7 +23,7 @@
     <tbody>
       {{#each stemmingen as |stemming| }}
       <tr>
-        <td>{{stemming.onderwerp}}</td>
+        <td style="max-width: 30rem;">{{stemming.onderwerp}}</td>
         <td>
           {{#if stemming.geheim}}
             Geheim
@@ -36,7 +36,7 @@
         	<p>Tegenstanders: {{stemming.aantalTegenstanders}}</p>
         	<p>Onthouders: {{stemming.aantalOnthouders}}</p>
         </td>
-        <td>{{stemming.gevolg}}</td>
+        <td style="max-width: 30rem;">{{stemming.gevolg}}</td>
         <td>
           {{#wu-button-group}}
             {{#wu-link-button class="button--small" isNarrow=true onClick=(action "edit" stemming)}}
