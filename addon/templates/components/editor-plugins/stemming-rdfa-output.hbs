@@ -24,7 +24,7 @@
     <p>
       <strong>Aanwezigen tijdens stemming</strong>
     </p>
-    <p class="small">
+    <p>
       {{#each stemming.aanwezigen as |mandataris|}}
         <span property="besluit:heeftAanwezige" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -45,6 +45,8 @@
             </span>
           </span>)
         </span>,&nbsp;
+      {{else}}
+      	<span class="smaller">Geen.</span>
       {{/each}}
     </p>
     <br>
@@ -52,7 +54,7 @@
     <p>
       <strong>Effectieve stemmers</strong>
     </p>
-    <p class="small">
+    <p>
       {{#each stemming.stemmers as |mandataris|}}
         <span property="besluit:heeftStemmer" resource={{mandataris.uri}} typeof={{mandataris._meta_generic_model.class.rdfaType}}>
 
@@ -73,6 +75,8 @@
             </span>
           </span>)
         </span>,&nbsp;
+      {{else}}
+      	<span class="smaller">Geen</span>
       {{/each}}
     </p>
     <br>
@@ -109,8 +113,10 @@
               </span>
             </span>)
           </span>,&nbsp;
+	      {{else}}
+      		<span class="smaller">Geen</span>
         {{/each}}
-      </p>
+	    </p>
       <p>
         <strong>Tegenstanders</strong>
       </p>
@@ -135,8 +141,10 @@
               </span>
             </span>)
           </span>,&nbsp;
+	      {{else}}
+      		<span class="smaller">Geen</span>
         {{/each}}
-      </p>
+    	</p>
       <p>
         <strong>Onthoudingen, blanco of ongeldig</strong>
       </p>
@@ -161,14 +169,14 @@
               </span>
             </span>)
           </span>,&nbsp;
+	      {{else}}
+	      	<span class="smaller">Geen</span>
         {{/each}}
       </p>
     {{/unless}}
 
     <p>Met als gevolg,</p>
-    <div>
-      <p property="besluit:gevolg">{{stemming.gevolg}}</p>
-    </div>
+    <p property="besluit:gevolg">{{stemming.gevolg}}</p>
 
     <!-- TODO: nieuwe stijl
 		<h6>Gevolg stemming</h6>
