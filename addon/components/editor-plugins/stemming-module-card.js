@@ -4,7 +4,8 @@ import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-module-card';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-
+import { warn } from '@ember/debug';
+import getUpToDateStemmingContainer from '../../utils/get-up-to-date-stemming-container-rich-node';
 /**
 * Card displaying a hint of the Date plugin
 *
@@ -86,7 +87,16 @@ export default Component.extend({
     insert(){
       const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
       this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-      this.get('editor').replaceNodeWithHTML(this.info.domNodeToUpdate, html);
+
+      const nodeToUpdate = getUpToDateStemmingContainer(this);
+
+      if (nodeToUpdate) {
+        const domNodeToUpdate = nodeToUpdate.domNode;
+        this.get('editor').replaceNodeWithHTML(domNodeToUpdate, html);
+      }
+      else{
+        warn('No matching node found to replace for stemming', { id: 'stemming-module-plugin.insert' });
+      }
     },
     togglePopup(){
        this.toggleProperty('popup');
