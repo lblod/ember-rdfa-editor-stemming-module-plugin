@@ -38,13 +38,12 @@
      as |m|}}
     {{#m.content isSectioned=true}}
       {{editor-plugins/stemming-container
-        editorRootNode=editor.rootNode
+        cardInfo=info
         bestuurseenheid=bestuurseenheid
         bestuursorgaan=bestuursorgaan
         instructiveUri=info.instructiveUri
         behandelingVanAgendapuntUri=info.behandelingVanAgendapuntUri
         outputId=outputId
-        domTable=info.domNodeToUpdate
         disableButtons=(action 'disableButtons')
       }}
     {{/m.content}}

@@ -5,12 +5,17 @@ import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scan
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
+import { reads } from '@ember/object/computed';
+import getUpToDateStemmingContainer from '../../utils/get-up-to-date-stemming-container-rich-node';
+import { warn } from '@ember/debug';
 
 export default Component.extend({
   layout,
   tagName: '',
   metaModelQuery: service(),
   tripleSerialization: service('triplesSerializationUtils'),
+
+  editorRootNode: reads('cardInfo.editor.rootNode'),
 
   isDomNodeBehandelingVanAgendapunt(domNode){
     let besluit = 'http://data.vlaanderen.be/ns/besluit#';
@@ -74,6 +79,12 @@ export default Component.extend({
 
   didReceiveAttrs() {
     this._super(...arguments);
+    if(!this.cardInfo) return;
+    this.set('domTable', getUpToDateStemmingContainer(this.cardInfo).domNode);
+    if(!this.domTable){
+      warn('No matching node found to replace for stemming', { id: 'stemming-module-plugin.stemming-container' });
+      return;
+    }
     if(this.behandelingVanAgendapuntUri)
       this.loadData.perform();
   }
