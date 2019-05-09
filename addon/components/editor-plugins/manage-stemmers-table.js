@@ -67,15 +67,37 @@ export default Component.extend({
     this.loadData.perform();
   },
 
-  actions: {
-    updateStembehaviour(row, stemBehaviour){
-      this.flushMandatarisFromStemming(row.mandataris);
+  updateStembehaviourRow(row, stemBehaviour){
+    this.flushMandatarisFromStemming(row.mandataris);
       row.set('selectedStemBehaviour', null);
       if(stemBehaviour){
         this.stemming.get(stemBehaviour.label).pushObject(row.mandataris);
         row.set('selectedStemBehaviour', stemBehaviour);
       }
-      this.onUpdate();
+    this.onUpdate();
+  },
+
+  actions: {
+    updateStembehaviour(row, stemBehaviour){
+      this.updateStembehaviourRow(row, stemBehaviour);
+    },
+
+    setUnaniemVoorstander(){
+      for(let row of this.rows){
+        this.updateStembehaviourRow(row, this.voorstanderProp);
+      }
+    },
+
+    setUnaniemTegenstander(){
+      for(let row of this.rows){
+        this.updateStembehaviourRow(row, this.tegenstanderProp);
+      }
+    },
+
+    setUnaniemOnthouder(){
+      for(let row of this.rows){
+        this.updateStembehaviourRow(row, this.onthouderProp);
+      }
     }
   }
 });

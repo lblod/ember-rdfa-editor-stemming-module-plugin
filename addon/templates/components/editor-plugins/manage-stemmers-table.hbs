@@ -19,12 +19,17 @@
           isSecret=isSecret
         }}
       {{else}}
-      <tr>
-      	<td colspan="3" style="background-color: white; height: 10rem;">
-	      	<p class="text-fade">Geen stemmers gevonden. Ga terug naar <strong>beheer aanwezigen</strong> en geef aanwezigen <strong>stemrecht</strong>.</p>
-      	</td>
-      </tr>
+        <tr>
+          <td colspan="3" style="background-color: white; height: 10rem;">
+            <p class="text-fade">Geen stemmers gevonden. Ga terug naar <strong>beheer aanwezigen</strong> en geef aanwezigen <strong>stemrecht</strong>.</p>
+          </td>
+        </tr>
       {{/each}}
     {{/if}}
   </tbody>
 </table>
+{{#wu-button-group class="u-spacer"}}
+  {{#wu-button isNarrow=true onClick=(action 'setUnaniemVoorstander')}}<i class="vi vi-check vi-u-s"></i> Unaniem voorstander{{/wu-button}}
+  {{#wu-button isNarrow=true onClick=(action 'setUnaniemTegenstander')}}<i class="vi vi-check vi-u-s"></i> Unaniem tegenstander{{/wu-button}}
+  {{#wu-button isNarrow=true onClick=(action 'setUnaniemOnthouder')}}<i class="vi vi-check vi-u-s"></i> Unaniem onthouder{{/wu-button}}
+{{/wu-button-group}}
