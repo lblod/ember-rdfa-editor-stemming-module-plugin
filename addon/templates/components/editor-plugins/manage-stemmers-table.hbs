@@ -1,3 +1,9 @@
+{{#wu-button-group class="u-spacer--tb"}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemVoorstander')}}Geef unaniem voorstander in <i class="vi vi-check vi-u-s"></i>{{/wu-button}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemTegenstander')}}Geef unaniem tegenstander in <i class="vi vi-cross vi-u-s"></i>{{/wu-button}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemOnthouder')}}Geef unaniem onthouder in <i class="fa fa-circle vi-u-s"></i>{{/wu-button}}
+{{/wu-button-group}}
+
 <table class="data-table data-table--lined data-table--zebra">
   <thead>
     <tr>
@@ -28,8 +34,8 @@
     {{/if}}
   </tbody>
 </table>
-{{#wu-button-group class="u-spacer"}}
-  {{#wu-button isNarrow=true onClick=(action 'setUnaniemVoorstander')}}<i class="vi vi-check vi-u-s"></i> Unaniem voorstander{{/wu-button}}
-  {{#wu-button isNarrow=true onClick=(action 'setUnaniemTegenstander')}}<i class="vi vi-check vi-u-s"></i> Unaniem tegenstander{{/wu-button}}
-  {{#wu-button isNarrow=true onClick=(action 'setUnaniemOnthouder')}}<i class="vi vi-check vi-u-s"></i> Unaniem onthouder{{/wu-button}}
+{{#wu-button-group class="u-spacer--tb"}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemVoorstander')}}Geef unaniem voorstander in <i class="vi vi-check vi-u-s"></i>{{/wu-button}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemTegenstander')}}Geef unaniem tegenstander in <i class="vi vi-cross vi-u-s"></i>{{/wu-button}}
+  {{#wu-button isNarrow=true isSmall=true isAltBlue=true isAlt=true onClick=(action 'setUnaniemOnthouder')}}Geef unaniem onthouder in <i class="fa fa-circle vi-u-s"></i>{{/wu-button}}
 {{/wu-button-group}}
