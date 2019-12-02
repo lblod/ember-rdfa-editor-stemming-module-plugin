@@ -1,7 +1,7 @@
 export default function getUpToDateStemmingContainer( { hrId, editor, hintsRegistry, location } ) {
   let region = hintsRegistry.updateLocationToCurrentIndex(hrId, location);
   const contexts = editor.getContexts({ region });
-  
+
   const baseUri = 'http://mu.semte.ch/vocabularies/ext/';
   const context = contexts.find(( snippet) =>  {
     const properties = [
@@ -16,4 +16,4 @@ export default function getUpToDateStemmingContainer( { hrId, editor, hintsRegis
     return context.semanticNode;
   }
   return {};
-};
+}
