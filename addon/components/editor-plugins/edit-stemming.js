@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
+import RdfaContextScanner from '@lblod/marawa/rdfa-context-scanner';
 
 //TODO: simplify properties
 export default Component.extend({
@@ -98,7 +98,7 @@ export default Component.extend({
   },
 
   serializeDomToTriples(domNode){
-    const contextScanner = RdfaContextScanner.create({});
+    const contextScanner = new RdfaContextScanner();
     const contexts = contextScanner.analyse(domNode).map((c) => c.context);
     if(contexts.length == 0)
       return [];

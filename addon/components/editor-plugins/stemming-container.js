@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-container';
 import ascendDomUntil from '../../utils/ascend-dom-until';
-import RdfaContextScanner from '@lblod/ember-rdfa-editor/utils/rdfa-context-scanner';
+import RdfaContextScanner from '@lblod/marawa/rdfa-context-scanner';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { A } from '@ember/array';
@@ -59,7 +59,7 @@ export default Component.extend({
   },
 
   serializeTableToTriples(table){
-    const contextScanner = RdfaContextScanner.create({});
+    const contextScanner = new RdfaContextScanner();
     const contexts = contextScanner.analyse(table).map((c) => c.context);
     if(contexts.length == 0)
       return [];
