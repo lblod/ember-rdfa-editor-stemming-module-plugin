@@ -63,7 +63,7 @@ export default Component.extend({
     const contexts = contextScanner.analyse(table).map((c) => c.context);
     if(contexts.length == 0)
       return [];
-    return Array.concat(...contexts);
+    return [].concat(...contexts);
   },
 
   setBehandelingVanAP(){

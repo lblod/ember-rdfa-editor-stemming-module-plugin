@@ -102,7 +102,7 @@ export default Component.extend({
     const contexts = contextScanner.analyse(domNode).map((c) => c.context);
     if(contexts.length == 0)
       return [];
-    return Array.concat(...contexts);
+    return [].concat(...contexts);
   },
 
   async findMandatarissenInDocument(triples){
