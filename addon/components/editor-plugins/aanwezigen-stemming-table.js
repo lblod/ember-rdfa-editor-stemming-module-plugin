@@ -95,8 +95,9 @@ export default Component.extend({
       mandatarissen = mandatarissen.filter((m) => (m.rangorde !== null));
     } else {
       mandatarissen = await this.findMandatarissen(aanwezigeUri);
-      if(mandatarissen.length == 0) return null;
     }
+
+    if(mandatarissen.length == 0) return null;
 
     let selectedMandataris = this.stemming.aanwezigen.find(m => m.isBestuurlijkeAliasVan[0].uri == aanwezigeUri);
 
