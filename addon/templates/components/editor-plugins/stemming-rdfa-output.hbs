@@ -5,20 +5,20 @@
       De raad stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
     </p>
     <!-- TODO nieuwe stijl:
-		<h5 property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
-			{{#if stemming.geheim}}Geheime{{else}}Openbare{{/if}} stemming
-		</h5>
-		-->
+    <h5 property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
+      {{#if stemming.geheim}}Geheime{{else}}Openbare{{/if}} stemming
+    </h5>
+    -->
     <br>
     <p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
 
     <!-- TODO nieuwe stijl:
-		<div>
-			<h6>Onderwerp van de stemming</h6>
-			<p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
-		</div>
-		<br>
-		-->
+    <div>
+      <h6>Onderwerp van de stemming</h6>
+      <p property="besluit:onderwerp">{{stemming.onderwerp}}</p>
+    </div>
+    <br>
+    -->
     <br>
 
     <p>
@@ -46,7 +46,7 @@
           </span>)
         </span>,&nbsp;
       {{else}}
-      	<span class="smaller">Geen.</span>
+        <span class="smaller">Geen.</span>
       {{/each}}
     </p>
     <br>
@@ -76,7 +76,7 @@
           </span>)
         </span>,&nbsp;
       {{else}}
-      	<span class="smaller">Geen</span>
+        <span class="smaller">Geen</span>
       {{/each}}
     </p>
     <br>
@@ -113,10 +113,10 @@
               </span>
             </span>)
           </span>,&nbsp;
-	      {{else}}
-      		<span class="smaller">Geen</span>
+        {{else}}
+          <span class="smaller">Geen</span>
         {{/each}}
-	    </p>
+      </p>
       <p>
         <strong>Tegenstanders</strong>
       </p>
@@ -141,10 +141,10 @@
               </span>
             </span>)
           </span>,&nbsp;
-	      {{else}}
-      		<span class="smaller">Geen</span>
+        {{else}}
+          <span class="smaller">Geen</span>
         {{/each}}
-    	</p>
+      </p>
       <p>
         <strong>Onthoudingen, blanco of ongeldig</strong>
       </p>
@@ -169,8 +169,8 @@
               </span>
             </span>)
           </span>,&nbsp;
-	      {{else}}
-	      	<span class="smaller">Geen</span>
+        {{else}}
+          <span class="smaller">Geen</span>
         {{/each}}
       </p>
     {{/unless}}
@@ -179,12 +179,12 @@
     <p property="besluit:gevolg">{{stemming.gevolg}}</p>
 
     <!-- TODO: nieuwe stijl
-		<h6>Gevolg stemming</h6>
-		<p property="stemming:gevolg">
-			{{stemming.gevolg}}
-		</p>
-		<br>
-		<br> -->
+    <h6>Gevolg stemming</h6>
+    <p property="stemming:gevolg">
+      {{stemming.gevolg}}
+    </p>
+    <br>
+    <br> -->
   </div>
   <br>
 {{/each}}
