@@ -1,7 +1,7 @@
 {{#each stemmingen as |stemming|}}
   <br>
   <div property="besluit:heeftStemming" resource={{stemming.uri}} typeof={{stemming._meta_generic_model.class.rdfaType}}>
-    <p property="besluit:geheim" content={{if stemming.geheim "true" "false"}}>
+    <p property="besluit:geheim" content={{if stemming.geheim "true" "false"}} datatype="xsd:boolean">
       De raad stemt {{#if stemming.geheim}}geheim{{else}}openbaar{{/if}},
     </p>
     <!-- TODO nieuwe stijl:
@@ -81,11 +81,11 @@
     </p>
     <br>
 
-    <p>Totaal aantal voorstanders: <span property="besluit:aantalVoorstanders" content={{stemming.aantalVoorstanders}}>{{stemming.aantalVoorstanders}}</span>
+    <p>Totaal aantal voorstanders: <span property="besluit:aantalVoorstanders" content={{stemming.aantalVoorstanders}} datatype="xsd:integer">{{stemming.aantalVoorstanders}}</span>
     </p>
-    <p>Totaal aantal tegenstanders: <span property="besluit:aantalTegenstanders" content={{stemming.aantalTegenstanders}}>{{stemming.aantalTegenstanders}}</span>
+    <p>Totaal aantal tegenstanders: <span property="besluit:aantalTegenstanders" content={{stemming.aantalTegenstanders}} datatype="xsd:integer">{{stemming.aantalTegenstanders}}</span>
     </p>
-    <p>Totaal aantal onthoudingen, blanco of ongeldig: <span property="besluit:aantalOnthouders" content={{stemming.aantalOnthouders}}>{{stemming.aantalOnthouders}}</span>
+    <p>Totaal aantal onthoudingen, blanco of ongeldig: <span property="besluit:aantalOnthouders" content={{stemming.aantalOnthouders}} datatype="xsd:integer">{{stemming.aantalOnthouders}}</span>
     </p>
     <br>
     {{#unless stemming.geheim}}
@@ -176,7 +176,7 @@
     {{/unless}}
 
     <p>Met als gevolg,</p>
-    <p property="besluit:gevolg">{{stemming.gevolg}}</p>
+    <p property="besluit:gevolg" lang="nl">{{stemming.gevolg}}</p>
 
     <!-- TODO: nieuwe stijl
     <h6>Gevolg stemming</h6>
