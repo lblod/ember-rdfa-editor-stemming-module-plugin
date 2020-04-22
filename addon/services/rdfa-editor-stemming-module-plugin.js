@@ -61,27 +61,23 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
    * @public
    */
   execute: task(function * (hrId, contexts, hintsRegistry, editor) {
-    if (contexts.length === 0) return [];
+    hintsRegistry.removeHints( { rdfaBlocks: contexts, hrId, scope: this.get('who') } );
 
     const hints = [];
     for(let context of contexts){
       this.setBestuursorgaanIfSet(context.context);
-      let triple = this.detectRelevantContext(context);
-      if(!triple) continue;
 
-      let domNode = this.findDomNodeForContext(editor, context, this.domNodeMatchesRdfaInstructive(triple));
+      let contextResult = this.detectRelevantContext(context);
+      if(!contextResult) continue;
+      const {semanticNode, predicate} = contextResult;
 
-      if(!domNode) continue;
-
-      if(triple.predicate == this.insertStemmingText){
-        hintsRegistry.removeHintsInRegion(context.region, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
+      if(predicate == this.insertStemmingText){
+        hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor));
       }
-      let domNodeRegion = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
+      let domNodeRegion = [ semanticNode.start, semanticNode.end ];
       //make sure no double hinting
-      if(triple.predicate == this.stemmingTable && !hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
-        hintsRegistry.removeHintsInRegion(domNodeRegion, hrId, this.who);
-        hints.pushObjects(this.generateHintsForContext(context, triple, domNode, editor));
+      if(predicate == this.stemmingTable && !hints.find(h => h.location[0] == domNodeRegion[0] && h.location[1] == domNodeRegion[1])){
+        hints.pushObjects(this.generateHintsForContext(context, predicate, semanticNode, editor));
       }
     }
 
@@ -102,13 +98,17 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
    *
    * @private
    */
-  detectRelevantContext(context){
-    if(context.context.slice(-1)[0].predicate == this.insertStemmingText){
-      return context.context.slice(-1)[0];
+  detectRelevantContext({ semanticNode }){
+    if (semanticNode.rdfaAttributes && semanticNode.rdfaAttributes.properties) {
+      const properties = semanticNode.rdfaAttributes.properties || A();
+      if (properties.includes(this.insertStemmingText)) {
+        return {semanticNode, predicate: this.insertStemmingText};
+      }
+      if (properties.includes(this.stemmingTable)) {
+        return {semanticNode, predicate: this.stemmingTable};
+      }
     }
-    if(context.context.find(t => t.predicate == this.stemmingTable)){
-      return context.context.find(t => t.predicate == this.stemmingTable);
-    }
+
     return null;
   },
 
@@ -129,11 +129,11 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
   generateCard(hrId, hintsRegistry, editor, hint, cardName){
     return EmberObject.create({
       info: {
-        label: 'Voeg tabel van fracties toe',
+        label: 'Voeg stemming toe',
         plainValue: hint.text,
         location: hint.location,
-        domNodeToUpdate: hint.domNode,
-        instructiveUri: hint.instructiveUri,
+        semanticNode: hint.semanticNode,
+        instructiveUri: hint.predicate,
         hrId, hintsRegistry, editor,
         behandelingVanAgendapuntUri: hint.behandelingVanAgendapuntUri
       },
@@ -154,43 +154,19 @@ const RdfaEditorStemmingModulePlugin = Service.extend({
    *
    * @private
    */
-  generateHintsForContext(context, instructiveTriple, domNode, editor, options = {}){
+  generateHintsForContext(context, predicate, semanticNode, editor, options = {}){
     const hints = [];
-    const text = context.text;
+    const text = context.text || '';
     let location = context.region;
-    if(instructiveTriple.predicate == this.stemmingTable){
-      location = [ editor.getRichNodeFor(domNode).start, editor.getRichNodeFor(domNode).end ];
+    if(predicate == this.stemmingTable){
+      location = [ semanticNode.start, semanticNode.end ];
       options.noHighlight = true;
+      options.editMode = true;
     }
-    let behandelingVanAgendapuntUri = context.context.slice(0).reverse().find(t => t.predicate == 'a' && t.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt');
-    hints.push({text, location, domNode,
-                instructiveUri: instructiveTriple.predicate,
-                behandelingVanAgendapuntUri: behandelingVanAgendapuntUri.subject,
-                options});
+    let behandelingVanAgendapuntUri = context.context.slice(0).reverse()
+        .find(t => t.predicate == 'a' && t.object == 'http://data.vlaanderen.be/ns/besluit#BehandelingVanAgendapunt').subject;
+    hints.push({text, location, semanticNode, predicate, behandelingVanAgendapuntUri, options});
     return hints;
-  },
-
-  domNodeMatchesRdfaInstructive(instructiveRdfa){
-    let ext = 'http://mu.semte.ch/vocabularies/ext/';
-    return (domNode) => {
-      if(!domNode.attributes || !domNode.attributes.property)
-        return false;
-      let expandedProperty = domNode.attributes.property.value.replace('ext:', ext);
-      if(instructiveRdfa.predicate == expandedProperty)
-        return true;
-      return false;
-    };
-  },
-
-  findDomNodeForContext(editor, context, condition){
-    let richNodes = isArray(context.richNode) ? context.richNode : [ context.richNode ];
-    let domNode = richNodes
-          .map(r => ascendDomUntil(editor.rootNode, r.domNode, condition))
-          .find(d => d);
-    if(!domNode){
-      warn(`Trying to work on unattached domNode. Sorry can't handle these...`, {id: 'stemming.domNode'});
-    }
-    return domNode;
   },
 
   setBestuursorgaanIfSet(triples) {
