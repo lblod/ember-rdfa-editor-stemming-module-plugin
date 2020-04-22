@@ -4,8 +4,7 @@ import Component from '@ember/component';
 import layout from '../../templates/components/editor-plugins/stemming-module-card';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { warn } from '@ember/debug';
-import getUpToDateStemmingContainer from '../../utils/get-up-to-date-stemming-container-rich-node';
+
 /**
 * Card displaying a hint of the Date plugin
 *
@@ -20,7 +19,7 @@ export default Component.extend({
     return `output-stemming-table-${this.elementId}`;
   }),
   store: service(),
-  rdfaEditorAanwezigenPlugin: service(),
+  rdfaEditorStemmingModulePlugin: service(),
   /**
    * Region on which the card applies
    * @property location
@@ -53,7 +52,7 @@ export default Component.extend({
   */
   hintsRegistry: reads('info.hintsRegistry'),
 
-  bestuursorgaanUri: reads('rdfaEditorAanwezigenPlugin.bestuursorgaanUri'),
+  bestuursorgaanUri: reads('rdfaEditorStemmingModulePlugin.bestuursorgaanUri'),
 
   disabledButtons: false,
 
@@ -85,18 +84,11 @@ export default Component.extend({
 
   actions: {
     insert(){
-      const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
-      this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-
-      const nodeToUpdate = getUpToDateStemmingContainer(this);
-
-      if (nodeToUpdate) {
-        const domNodeToUpdate = nodeToUpdate.domNode;
-        this.get('editor').replaceNodeWithHTML(domNodeToUpdate, html);
-      }
-      else{
-        warn('No matching node found to replace for stemming', { id: 'stemming-module-plugin.insert' });
-      }
+    const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
+    this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
+    this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location);
+    const selections = this.editor.selectHighlight(this.location);
+    this.get('editor').update(selections, {set: {innerHTML: html}});
     },
     togglePopup(){
        this.toggleProperty('popup');
