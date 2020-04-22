@@ -69,7 +69,11 @@ export default Component.extend({
   },
 
   createWrappingHTML(innerHTML){
-    return `<div property="ext:stemmingTable">${innerHTML}</div>`;
+    return `<div property="ext:stemmingTable">
+              <span class="u-hidden">${new Date().toISOString()}</span>
+                ${innerHTML}
+              <span class="u-hidden">${new Date().toISOString() + 1}</span>
+            </div>`;
   },
 
   loadData: task(function *(){
