@@ -84,11 +84,11 @@ export default Component.extend({
 
   actions: {
     insert(){
-    const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
-    this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
-    this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location);
-    const selections = this.editor.selectHighlight(this.location);
-    this.get('editor').update(selections, {set: {innerHTML: html}});
+      const html = this.createWrappingHTML(document.getElementById(this.outputId).innerHTML);
+      this.hintsRegistry.removeHintsAtLocation(this.location, this.hrId, this.info.who);
+      this.location = this.hintsRegistry.updateLocationToCurrentIndex(this.hrId, this.location);
+      const selections = this.editor.selectHighlight(this.location);
+      this.get('editor').update(selections, {set: {innerHTML: html}});
     },
     togglePopup(){
        this.toggleProperty('popup');
