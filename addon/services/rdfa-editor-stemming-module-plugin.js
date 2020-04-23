@@ -21,7 +21,6 @@ import { task } from 'ember-concurrency';
  *
  *  POTENTIAL ISSUES/TODO
  *  ---------------------
- *  - The domNode is passed to the card. At insertion time, the domNode may be detached from tree, which results in broken plugin.
  *
  *   - Performance: A scan on RDFA content is slow once we have a lot of aanwezigen
  *
